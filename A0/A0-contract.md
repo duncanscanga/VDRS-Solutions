@@ -49,9 +49,9 @@ Student Number:	20175895
 
 Team Member #3:
 
-Name:
+Name: Duncan Scanga
 
-Student Number:	
+Student Number:	20213766
 
 
 Team Member #4:
