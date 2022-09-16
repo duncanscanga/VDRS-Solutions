@@ -42,9 +42,9 @@ Student Number:	20208406
 
 Team Member #2:
 
-Name: Rahul
+Name: 
 
-Student Number:	20223004
+Student Number:	
 
 
 Team Member #3:
@@ -56,6 +56,6 @@ Student Number:
 
 Team Member #4:
 
-Name:
+Name:  Rahul
 
-Student Number:	
+Student Number:	20223004
