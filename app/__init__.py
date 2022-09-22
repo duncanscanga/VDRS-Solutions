@@ -26,6 +26,8 @@ class Property(db.Model):
     state = db.Column(db.String(80), nullable=False)
     # Stores the postal/zip code.
     zip_code = db.Column(db.String(80), nullable=False)
+    # Stores the user who created the property
+    owner_id = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return "<Property %r>" % self.id
