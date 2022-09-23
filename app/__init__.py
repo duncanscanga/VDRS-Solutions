@@ -69,7 +69,6 @@ class Booking(db.Model):
 
 
 class User(db.Model):
-
     """A class to represent the User Entity."""
 
     id = db.Column(db.Integer, primary_key=True)
