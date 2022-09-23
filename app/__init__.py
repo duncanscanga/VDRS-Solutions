@@ -83,4 +83,4 @@ class User(db.Model):
     # Stores the amount of money
 
     def __repr__(self):
-        return '<User %r>' % self.id
+        return "<User %r>" % self.id
