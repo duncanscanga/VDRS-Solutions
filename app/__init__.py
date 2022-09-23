@@ -66,21 +66,3 @@ class Booking(db.Model):
 
     def __repr__(self):
         return "<Booking %r>" % self.id
-
-
-class User(db.Model):
-    """A class to represent the User Entity."""
-
-    id = db.Column(db.Integer, primary_key=True)
-    # Stores the id
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    # Stores the username
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    # Stores the email
-    real_name = db.Column(db.String(80), unique=True, nullable=False)
-    # Stores the real name
-    money = db.Column(db.Integer)
-    # Stores the amount of money
-
-    def __repr__(self):
-        return '<User %r>' % self.id
