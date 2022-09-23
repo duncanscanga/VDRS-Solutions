@@ -49,3 +49,20 @@ class Listing(db.Model):
 
     def __repr__(self):
         return "<Listing %r>" % self.id
+
+
+class Booking(db.Model):
+    """A class to represent a qB&B Booking."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    # Stores the corresponding listing ID
+    listing_id = db.Column(db.Integer, nullable=False)
+    # Stores the corresponding renter ID
+    renter_id = db.Column(db.Integer, nullable=False)
+    # Stores the review of the guest in paragraph form
+    review = db.Column(db.String(200), nullable=False)
+    # Stores the number 1-5 rating
+    review_score = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return "<Booking %r>" % self.id
