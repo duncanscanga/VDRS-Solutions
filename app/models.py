@@ -123,14 +123,14 @@ class Review(db.Model):
     review_score = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-        return "<User %r>" % self.id
+        return "<Review %r>" % self.id
 
 
 # create all tables
 db.create_all()
 
 
-def register(name, email, real_name, password, b, p):
+def register(name, email, real_name, password, billing_address, postal_code):
     '''
     Register a new user
       Parameters:
@@ -147,8 +147,8 @@ def register(name, email, real_name, password, b, p):
 
     # create a new user
     user = User(username=name, email=email, real_name=real_name, balance=0,
-                password=password, billing_address=b,
-                postal_code=p)
+                password=password, billing_address=billing_address,
+                postal_code=postal_code)
     # add it to the current database session
     db.session.add(user)
     # actually save the user object
