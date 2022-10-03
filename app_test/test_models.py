@@ -1,4 +1,4 @@
-from app.models import pw_check, register, login
+from app.models import email_check, pw_check, register, login
 
 
 def test_r1_7_user_register():
@@ -46,3 +46,14 @@ def test_r1_4_pw_check():
     assert pw_check("12345A") is False    # Missing lower and special
     assert pw_check("12345Aa") is False   # Missing special
     assert pw_check("12345Aa#") is True   # Satisfies all requirements
+
+
+def test_r1_3_email_check():
+    '''
+    Testing R1-3: The email has to follow add-spec defined in RFC 5322
+    '''
+    assert email_check("hello@gmail.com") is True
+    assert email_check("firstname.lastname@example.com") is True
+    assert email_check("email@example.co.jp") is True
+    assert email_check("InvalidEmail") is False
+    assert email_check("email..email@example.com") is False
