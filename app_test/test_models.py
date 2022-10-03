@@ -13,9 +13,9 @@ def test_r1_7_user_register():
 
 def test_r2_1_login():
     '''
-    Testing R2-1: A user can log in using her/his email address 
+    Testing R2-1: A user can log in using her/his email address
       and the password.
-    (will be tested after the previous test, so we already have u0, 
+    (will be tested after the previous test, so we already have u0,
       u1 in database)
     '''
 
