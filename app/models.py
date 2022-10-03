@@ -1,5 +1,6 @@
 from app import app
 from flask_sqlalchemy import SQLAlchemy
+from validate_email import validate_email
 
 
 '''
@@ -200,3 +201,10 @@ def pw_check(password):
 
     # Only return true if all the flags got set to True at least once
     return has_upper and has_lower and has_special
+
+
+# Uses the validate_email library to ensure the email is valid.
+# We can use this single line inside the methods that need it
+# instead of leaving it as its own function.
+def email_check(email):
+    return validate_email(email)
