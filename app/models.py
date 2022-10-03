@@ -90,15 +90,15 @@ class User(db.Model):
     # Stores the username
     username = db.Column(db.String(80), nullable=False)
     # Stores the email
-    email = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
     # Stores the amount of balance
     balance = db.Column(db.Integer, nullable=False)
     # Stores the password
     password = db.Column(db.String(80), nullable=False)
     # Stores the billing address
-    billing_address = db.Column(db.String(120), nullable=False)
+    billing_address = db.Column(db.String(200), nullable=False)
     # Stores the postal code
-    postal_code = db.Column(db.String(80), nullable=False)
+    postal_code = db.Column(db.String(100), nullable=False)
     # Stores the real name (not required)
     real_name = db.Column(db.String(80), unique=False, nullable=False)
 
@@ -130,7 +130,7 @@ class Review(db.Model):
 db.create_all()
 
 
-def register(name, email, real_name, password):
+def register(name, email, real_name, password, b, p):
     '''
     Register a new user
       Parameters:
@@ -146,8 +146,9 @@ def register(name, email, real_name, password):
         return False
 
     # create a new user
-    user = User(username=name, email=email,
-                real_name=real_name, balance=0, password=password)
+    user = User(username=name, email=email, real_name=real_name, balance=0,
+                password=password, billing_address=b,
+                postal_code=p)
     # add it to the current database session
     db.session.add(user)
     # actually save the user object
