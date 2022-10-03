@@ -38,16 +38,20 @@ class Property(db.Model):
 class Listing(db.Model):
     """A class to represent a qB&B Listing."""
 
-    id = db.Column(db.Integer, primary_key=True)
     # Stores the corresponding property's id
-    property_id = db.Column(db.Integer, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    # Stores the title
+    title = db.Column(db.String(80), nullable=False)
+    # Stores the description
+    description = db.Column(db.String(200), nullable=False)
     # Stores the corresponding home owner's id
     owner_id = db.Column(db.Integer, nullable=False)
     # Stores decimal cost of listing
     price = db.Column(db.Float, nullable=False)
-    # Stores start and end datetime.date() object
-    start_date = db.Column(db.Date, nullable=False)
-    end_date = db.Column(db.Date, nullable=False)
+    # Stores the last modified date
+    last_modified_date = db.Column(db.Date, nullable=False)
+    # Stores the corresponding property id (not required)
+    property_id = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return "<Listing %r>" % self.id
@@ -59,12 +63,20 @@ class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # Stores the corresponding listing ID
     listing_id = db.Column(db.Integer, nullable=False)
+    # Stores decimal cost of listing
+    price = db.Column(db.Float, nullable=False)
+    # Stores booking date of the listing
+    date = db.Column(db.Date, nullable=False)
     # Stores the corresponding renter ID
-    renter_id = db.Column(db.Integer, nullable=False)
-    # Stores the review of the guest in paragraph form
-    review = db.Column(db.String(200), nullable=False)
-    # Stores the number 1-5 rating
-    review_score = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, nullable=False)
+    # Stores the corresponding owner ID (not required)
+    owner_id = db.Column(db.Integer, nullable=False)
+    # Stores the id of the review of the guest (not required)
+    review_id = db.Column(db.Integer, nullable=False)
+    # Stores start date of the listing (not required)
+    start_date = db.Column(db.Date, nullable=False)
+    # Stores end date of the listing (not required)
+    end_date = db.Column(db.Date, nullable=False)
 
     def __repr__(self):
         return "<Booking %r>" % self.id
@@ -73,17 +85,42 @@ class Booking(db.Model):
 class User(db.Model):
     """A class to represent the User Entity."""
 
-    id = db.Column(db.Integer, primary_key=True)
     # Stores the id
-    username = db.Column(db.String(80), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
     # Stores the username
-    email = db.Column(db.String(120), nullable=False)
+    username = db.Column(db.String(80), nullable=False)
     # Stores the email
-    real_name = db.Column(db.String(80), unique=True)
-    # Stores the real name
-    money = db.Column(db.Integer)
+    email = db.Column(db.String(120), nullable=False)
     # Stores the amount of money
+    balance = db.Column(db.Integer, nullable=False)
+    # Stores the password
     password = db.Column(db.String(80), nullable=False)
+    # Stores the billing address
+    billing_address = db.Column(db.String(120), nullable=False)
+    # Stores the postal code
+    postal_code = db.Column(db.String(80), nullable=False)
+    # Stores the real name (not required)
+    real_name = db.Column(db.String(80), unique=False, nullable=False)
+
+    def __repr__(self):
+        return "<User %r>" % self.id
+
+
+class Review(db.Model):
+    """A class to represent the Review Entity."""
+
+    # Stores the id
+    id = db.Column(db.Integer, primary_key=True)
+    # Stores the corresponding reviewers id
+    user_id = db.Column(db.Integer, nullable=False)
+    # Stores the corresponding listing id
+    listing_id = db.Column(db.Integer, nullable=False)
+    # Stores the review of the guest in paragraph form
+    review_text = db.Column(db.String(200), nullable=False)
+    # Stores date of the review
+    date = db.Column(db.Date, nullable=False)
+    # Stores the number 1-5 rating (not required)
+    review_score = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return "<User %r>" % self.id
