@@ -170,3 +170,33 @@ def login(email, password):
     if len(valids) != 1:
         return None
     return valids[0]
+
+
+def pw_check(password):
+    '''
+    Ensure the password is valid
+      Parameters:
+        password (string):     user password
+      Returns:
+        True if password is valid otherwise False
+    '''
+    # Needs to be at least 6 characters
+    if len(password) < 6:
+        return False
+
+    has_upper = False
+    has_lower = False
+    has_special = False
+
+    # For each character, update upper, lower,
+    # and special flags if char matches the requirement
+    for c in password:
+        if c.isupper():
+            has_upper = True
+        elif c.islower():
+            has_lower = True
+        elif not c.isalnum():
+            has_special = True
+
+    # Only return true if all the flags got set to True at least once
+    return has_upper and has_lower and has_special
