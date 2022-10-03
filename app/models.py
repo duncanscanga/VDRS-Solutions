@@ -75,11 +75,11 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     # Stores the id
-    username = db.Column(db.String(80), unique=True, nullable=False)
+    username = db.Column(db.String(80), nullable=False)
     # Stores the username
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(120), nullable=False)
     # Stores the email
-    real_name = db.Column(db.String(80), unique=True, nullable=False)
+    real_name = db.Column(db.String(80), unique=True)
     # Stores the real name
     money = db.Column(db.Integer)
     # Stores the amount of money
@@ -93,7 +93,7 @@ class User(db.Model):
 db.create_all()
 
 
-def register(name, email, password):
+def register(name, email, real_name, password):
     '''
     Register a new user
       Parameters:
@@ -109,7 +109,7 @@ def register(name, email, password):
         return False
 
     # create a new user
-    user = User(username=name, email=email, password=password)
+    user = User(username=name, email=email, real_name=real_name, money=0,  password=password)
     # add it to the current database session
     db.session.add(user)
     # actually save the user object
