@@ -1,4 +1,4 @@
-from app.models import register, login
+from app.models import pw_check, register, login
 
 
 def test_r1_7_user_register():
@@ -25,3 +25,21 @@ def test_r2_1_login():
 
     user = login('test0@test.com', 1234567)
     assert user is None
+
+
+def test_r1_4_pw_check():
+    '''
+    Testing R1-4: Password has to meet the required complexity:
+    - minimum length 6
+    - At least one upper case
+    - At least one lower case
+    - At least one special character
+    '''
+
+    assert pw_check("12345") is False     # Not long enough
+    assert pw_check("123456") is False
+    # Long enough, missing alpha and special
+    assert pw_check("12345a") is False    # Missing upper case and special
+    assert pw_check("12345A") is False    # Missing lower and special
+    assert pw_check("12345Aa") is False   # Missing special
+    assert pw_check("12345Aa#") is True   # Satisfies all requirements
