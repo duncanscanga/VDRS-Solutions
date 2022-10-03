@@ -110,7 +110,7 @@ def register(name, email, real_name, password):
 
     # create a new user
     user = User(username=name, email=email,
-                real_name=real_name, money=0,  password=password)
+                real_name=real_name, money=0, password=password)
     # add it to the current database session
     db.session.add(user)
     # actually save the user object
