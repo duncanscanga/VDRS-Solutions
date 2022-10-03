@@ -83,6 +83,7 @@ class User(db.Model):
     # Stores the real name
     money = db.Column(db.Integer)
     # Stores the amount of money
+    password = db.Column(db.String(80), nullable=False)
 
     def __repr__(self):
         return "<User %r>" % self.id
