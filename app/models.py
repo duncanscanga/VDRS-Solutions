@@ -146,7 +146,7 @@ def register(name, email, real_name, password, b, p):
         return False
 
     # create a new user
-    user = User(username=name, email=email, real_name=real_name, balance=0,
+    user = User(username=name, email=email,balance=0,
                 password=password, billing_address=b,
                 postal_code=p)
     # add it to the current database session
