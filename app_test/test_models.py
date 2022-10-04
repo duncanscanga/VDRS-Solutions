@@ -1,8 +1,4 @@
-from app.models import (
-                alphanumeric_check, email_check, create_listing,
-                unique_title_check, owner_check, length_check,
-                pw_check, range_check, register, login,
-                description_length_check, date_check)
+from app.models import *
 from datetime import date
 
 
