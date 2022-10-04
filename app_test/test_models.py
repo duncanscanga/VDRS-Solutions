@@ -2,6 +2,7 @@ from app.models import alphanumeric_check, email_check, create_listing, \
     unique_title_check, owner_check, length_check, pw_check, \
     range_check, register, login, description_length_check, date_check
 from datetime import date
+from app import app
 
 
 def test_r1_7_user_register():
