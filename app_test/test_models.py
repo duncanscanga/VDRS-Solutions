@@ -3,6 +3,11 @@ from app.models import alphanumeric_check, email_check, create_listing, \
     range_check, register, login, description_length_check, date_check
 from datetime import date
 from app import app
+import pytest
+@pytest.fixture
+def app_context():
+    with app.app_context():
+        yield
 
 
 def test_r1_7_user_register():
