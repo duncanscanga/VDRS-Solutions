@@ -128,10 +128,6 @@ class Review(db.Model):
         return "<Review %r>" % self.id
 
 
-# create all tables
-db.create_all()
-
-
 def register(name, email, real_name, password, billing_address, postal_code):
     '''
     Register a new user
@@ -344,3 +340,7 @@ def owner_check(owner_id):
     if len(existed) > 0:
         return True
     return False
+
+
+# create all tables
+db.create_all()
