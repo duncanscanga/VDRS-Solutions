@@ -1,5 +1,6 @@
 # VDRS-Solutions - CMPE 327 Software Quality Assurance Project
-
+[![Pytest - All Tests](https://github.com/duncanscanga/VDRS-Solutions/actions/workflows/pytest.yml/badge.svg)](https://github.com/duncanscanga/VDRS-Solutions/actions/workflows/pytest.yml)
+[![PEP8 Format Test](https://github.com/duncanscanga/VDRS-Solutions/actions/workflows/style_check.yml/badge.svg)](https://github.com/duncanscanga/VDRS-Solutions/actions/workflows/style_check.yml)
 # Setting up local development environment
 The most efficient way to develop Flask projects locally is to create a virtual environment to install Flask and other dependencies. Here's a quick guide to get started.
 
