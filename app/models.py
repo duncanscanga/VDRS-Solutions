@@ -129,8 +129,7 @@ class Review(db.Model):
 
 
 # create all tables
-with app.app_context():
-    db.create_all()
+db.create_all()
 
 
 def register(name, email, real_name, password, billing_address, postal_code):

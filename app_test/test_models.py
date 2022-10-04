@@ -265,4 +265,4 @@ def test_r4_8_unique_title():
     create_listing("Title", "This is a description.", 100, 1)
     assert unique_title_check("Title") is False
     # Title is unique
-    assert unique_title_check("Unused Title") is False
+    assert unique_title_check("Unused Title") is True
