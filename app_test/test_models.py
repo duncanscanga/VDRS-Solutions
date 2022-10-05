@@ -106,91 +106,11 @@ def test_r4_3_description_length_check():
     # Description that is more than 20 characters and less than 2000
     assert length_check("Lorem ipsum dolor sit.", 20, 2000) is True
     # Description that is more than 20 characters and equal to 2000
-    assert length_check("Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer",
-                        20, 2000) is True
+    text = "x" * 2000
+    assert length_check(text, 20, 2000) is True
+    text = "x" * 2002
     # Description that is more than 20 characters and greater than 2000
-    assert length_check("Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci" +
-                        "Lorem ipsum dolor sit amet, consectetuer adipisci",
-                        20, 2000) is False
+    assert length_check(text, 20, 2000) is False
 
 
 def test_r4_4_description_length_check():
