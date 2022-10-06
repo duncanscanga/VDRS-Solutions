@@ -383,7 +383,7 @@ def update_user(curr_name, new_name, new_email, new_addr, new_postal):
             if (
                 (len(User.query.filter_by(username=new_name).all()) > 0) or
                 (len(User.query.filter_by(email=new_email).all()) > 0)
-             ):
+            ):
                 return False
             # If they're unique, update all the fields
             else:
