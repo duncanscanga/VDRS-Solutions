@@ -1,0 +1,6 @@
+flask
+Flask-SQLAlchemy
+pytest
+flake8
+validate_email
+datetime
