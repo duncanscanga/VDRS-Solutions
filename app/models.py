@@ -428,11 +428,15 @@ def postal_code_check(postal_code):
 
 def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
     '''
-    R3-2, R3-3: Ensures postal code is a valid Canadian postal code.
+    R5-1, R5-2, R5-4: Can only update title, desc, and price
     Parameters:
-        postal_code (String):   new or updated code
+        new_title   (String):   updated title
+        new_desc    (String):   updated description
+        curr_price  (float):    original price
+        new_price   (float):    updated price
+        owner_id    (int):      owner's id
     Returns:
-        True if the postal code is valid, False otherwise
+        True if the update is successful, False otherwise
     '''
 
     # Check if the listing exists using the owner_id
