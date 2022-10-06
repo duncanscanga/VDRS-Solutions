@@ -161,17 +161,26 @@ def register(name, email, real_name, password, billing_address, postal_code):
 
 def login(email, password):
     '''
-    Check login information
+    Check login information:
+      First, email and password inputs needs to meet the same email/
+      password requiremnts in the email_check and pw_check functions
+
       Parameters:
         email (string):    user email
         password (string): user password
       Returns:
         The user object if login succeeded otherwise None
     '''
-    valids = User.query.filter_by(email=email, password=password).all()
-    if len(valids) != 1:
-        return None
-    return valids[0]
+    # The email and password inputs need to meet the requirements
+    # specified in email_check and pw_check
+    if email_check(email) and pw_check(password) is True:
+        # compare email/password with the originally registered email/password
+        valids = User.query.filter_by(email=email, password=password).all()
+        if len(valids) != 1:
+            return None
+        return valids[0]
+    else:
+        return False
 
 
 def pw_check(password):
