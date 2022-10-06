@@ -353,3 +353,74 @@ def owner_check(owner_id):
     if len(existed) > 0:
         return True
     return False
+
+
+def update_user(curr_name, new_name, new_email, new_addr, new_postal):
+    '''
+    R3-1, R3-4: Allow user to update username, email,
+    billing addr, and postal code.
+    Parameters:
+        curr_name   (String):     current username
+        new_name    (String):     updated username
+        new_email   (String):     updated email
+        new_addr    (String):     updated billing address
+        new_postal  (String):     updated postal code
+    Returns:
+        True if the transaction is successful, False otherwise
+    '''
+    # If the current user exists
+    valid = User.query.filter_by(username=curr_name).all()
+    if len(valid) == 1:
+        # We check if the new information is of a valid format
+        if (
+            postal_code_check(new_postal) and
+            email_check(new_email) and
+            alphanumeric_check(new_name) and
+            length_check(new_name, 3, 19)
+        ):
+
+            # We then check if the new username and email are unique
+            if (
+                (len(User.query.filter_by(username=new_name).all()) > 0) or
+                (len(User.query.filter_by(email=new_email).all()) > 0)
+             ):
+                return False
+            # If they're unique, update all the fields
+            else:
+                valid[0].username = new_name
+                valid[0].email = new_email
+                valid[0].billing_address = new_addr
+                valid[0].postal_code = new_postal
+                db.session.commit()
+                return True
+        else:
+            # If any of the fields are not formatted properly, return False
+            return False
+    else:
+        # If the current user does not exist, return False right away
+        return False
+
+
+def postal_code_check(postal_code):
+    '''
+    R3-2, R3-3: Ensures postal code is a valid Canadian postal code.
+    Parameters:
+        postal_code (String):   new or updated code
+    Returns:
+        True if the postal code is valid, False otherwise
+    '''
+    if len(postal_code) != 7:
+        return False
+
+    if (
+        (not postal_code[0].isalpha()) or
+        (not postal_code[1].isnumeric()) or
+        (not postal_code[2].isalpha()) or
+        (not postal_code[3] == " ") or
+        (not postal_code[4].isnumeric()) or
+        (not postal_code[5].isalpha()) or
+        (not postal_code[6].isnumeric())
+    ):
+        return False
+    else:
+        return True

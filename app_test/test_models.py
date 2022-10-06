@@ -1,6 +1,8 @@
-from app.models import alphanumeric_check, email_check, create_listing, \
+from app.models import alphanumeric_check, email_check, \
+    create_listing, postal_code_check, \
     unique_title_check, owner_check, length_check, pw_check, \
-    range_check, register, login, description_length_check, date_check
+    range_check, register, login, description_length_check, \
+    date_check, update_user
 from datetime import date
 
 
@@ -38,8 +40,8 @@ def test_r2_1_login():
     user = login('InvalidEmail', '12345Aa#')   # Invalid email
     assert user is False
 
-    user = login('test0@test.com', '12345')   # Password not long enough
-    assert user is False 
+    user = login('test0@test.com', '12345')     # Password not long enough
+    assert user is False
 
 
 def test_r1_4_pw_check():
@@ -195,3 +197,67 @@ def test_r4_8_unique_title():
     assert unique_title_check("Title") is False
     # Title is unique
     assert unique_title_check("Unused Title") is True
+
+
+def test_r3_2_3_postal_check():
+    '''
+    R3-2: Postal code should be non-empty,
+    alnum only, and no special characters.
+    R3-3: Postal code has to be a valid Canadian postal code.
+    '''
+    assert postal_code_check("") is False
+    assert postal_code_check("aaa") is False
+    assert postal_code_check("aaa !aa") is False
+    assert postal_code_check("k1k5m5") is False
+    assert postal_code_check("aaaa aaa") is False
+    assert postal_code_check("k1k 5m5") is True
+
+
+def test_r3_1_update_user():
+    '''
+    R3-1: A user is only able to update his/her username,
+    billing address, and postal code.
+    '''
+    # Start by registering a user
+    # (postal code added since register method requires it,
+    # must be removed later R1-9)
+    assert register('original username', 'user@test.com',
+                    'real_u1', '12345Aa#',
+                    '1209 King St W Suite 201', 'K7L 3N6') is True
+
+    # If curr_name does not exist, cannot update
+    assert update_user('invalid_username', 'updated_username', 'new@test.com',
+                       'address', 'K7L 3N6') is False
+
+    # If new name does not have proper format, cannot update
+    assert update_user('original username', '  my new name   ', 'new@test.com',
+                       'address', 'K7L 3N6') is False
+    assert update_user('original_username',
+                       'aaaaaaaaaaaaaaaaaaaaa', 'new@test.com',
+                       'address', 'K7L 3N6') is False
+
+    # If new email does not have proper format, cannot update
+    assert update_user('original username', 'new_user', '',
+                       'address', 'K7L 3N6') is False
+
+    # If new postal code does not have proper format, cannot update
+    assert update_user('original username', 'new_user', 'new@test.com',
+                       'address', 'K7L') is False
+
+    # If the new username/email already exists, cannot update
+    assert update_user('original username',
+                       'original username', 'new@test.com',
+                       'address', 'K7L 3N6') is False
+    assert update_user('original username', 'new user', 'user@test.com',
+                       'address', 'K7L 3N6') is False
+
+    # Valid update
+    assert update_user('original username', 'new username',
+                       'new@test.com', 'address', 'K7L 3N5') is True
+
+    # Ensure all fields were updated properly
+    user = login('new@test.com', '12345Aa#')
+    assert user is not None
+    assert user.username == 'new username'
+    assert user.billing_address == 'address'
+    assert user.postal_code == 'K7L 3N5'
