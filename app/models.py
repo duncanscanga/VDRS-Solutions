@@ -424,3 +424,49 @@ def postal_code_check(postal_code):
         return False
     else:
         return True
+
+
+def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
+    '''
+    R3-2, R3-3: Ensures postal code is a valid Canadian postal code.
+    Parameters:
+        postal_code (String):   new or updated code
+    Returns:
+        True if the postal code is valid, False otherwise
+    '''
+
+    # Check if the listing exists using the owner_id
+    valid = User.query.filter_by(id=owner_id).all()
+    if len(valid) > 0:
+        # Check if the format of the new information is correct
+        if (alphanumeric_check(new_title) and
+                length_check(new_title, 0, 80) and 
+                length_check(new_desc, 20, 2000)
+                and description_length_check(new_desc, new_title) and
+                range_check(new_price, curr_price, 10000) and
+                unique_title_check(new_title)):
+
+            # Update title, description and price
+            valid[0].title = new_title
+            valid[0].description = new_desc
+            valid[0].price = new_price
+
+            # When the update operations are successful,
+            # update the modified date
+            # Check if the new date format is correct
+            if (date_check(date.today(), date(2021, 1, 2), date(2025, 1, 2))):
+                # Update the modified date
+                valid[0].last_modified_date = date.today()
+                db.session.commit()
+                return True
+            
+            # Modified date does not follow requirements
+            else:
+                return False
+            
+        # New information does not follow required format
+        else:
+            return False
+        
+    # Listing does not exist
+    return False
