@@ -440,8 +440,8 @@ def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
     '''
 
     # Check if the listing exists using the owner_id
-    valid = User.query.filter_by(id=owner_id).all()
-    if len(valid) > 0:
+    listing = Listing.query.filter_by(id=owner_id).all()
+    if len(listing) > 0:
         # Check if the format of the new information is correct
         if (alphanumeric_check(new_title) and
                 length_check(new_title, 0, 80) and 
@@ -451,16 +451,16 @@ def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
                 unique_title_check(new_title)):
 
             # Update title, description and price
-            valid[0].title = new_title
-            valid[0].description = new_desc
-            valid[0].price = new_price
+            listing[0].title = new_title
+            listing[0].description = new_desc
+            listing[0].price = new_price
 
             # When the update operations are successful,
             # update the modified date
             # Check if the new date format is correct
             if (date_check(date.today(), date(2021, 1, 2), date(2025, 1, 2))):
                 # Update the modified date
-                valid[0].last_modified_date = date.today()
+                listing[0].last_modified_date = date.today()
                 db.session.commit()
                 return True
             
@@ -473,4 +473,12 @@ def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
             return False
         
     # Listing does not exist
+    return False
+
+
+# Returns the listing when the owner id is passed in
+def find_listing(owner_id):
+    listing = Listing.query.filter_by(id=owner_id).all()
+    if len(listing) > 0:
+        return listing[0]
     return False

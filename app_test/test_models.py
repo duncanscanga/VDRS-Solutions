@@ -2,7 +2,7 @@ from app.models import alphanumeric_check, email_check, \
     create_listing, postal_code_check, \
     unique_title_check, owner_check, length_check, pw_check, \
     range_check, register, login, description_length_check, \
-    date_check, update_user, update_listing
+    date_check, update_user, update_listing, find_listing
 from datetime import date
 
 
@@ -288,5 +288,12 @@ def test_r5_1_update_listing():
 
     # Update is successful if all the requirements are passed
     assert update_listing("Newest Title", 
-                          "This is a short description. short description", 
+                          "This is a short description. description", 
                           150, 153, 1) is True
+    
+    # Check if the update is successful
+    listing = find_listing(1) 
+    assert listing is not None
+    assert listing.title == 'Newest Title'
+    assert listing.description == 'This is a short description. description'
+    assert listing.price == 153
