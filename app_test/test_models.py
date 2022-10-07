@@ -11,12 +11,9 @@ def test_r1_7_user_register():
     Testing R1-7: If the email has been used, the operation failed.
     '''
 
-    assert register('u0', 'test0@test.com', 'real_u1', '12345Aa#',
-                    '1209 King St W Suite 201', 'K7L 3N6') is True
-    assert register('u1', 'test1@test.com', 'real_u2', '123456',
-                    '1209 King St W Suite 201', 'K7L 3N6') is True
-    assert register('u2', 'test1@test.com', 'real_u3', '123456',
-                    '1209 King St W Suite 201', 'K7L 3N6') is False
+    assert register('u0', 'test0@test.com', 'real_u1', '12345Aa#') is True
+    assert register('u1', 'test1@test.com', 'real_u2', '123456') is True
+    assert register('u2', 'test1@test.com', 'real_u3', '123456') is False
 
 
 def test_r2_1_login():
@@ -222,42 +219,32 @@ def test_r3_1_update_user():
     # (postal code added since register method requires it,
     # must be removed later R1-9)
     assert register('original username', 'user@test.com',
-                    'real_u1', '12345Aa#',
-                    '1209 King St W Suite 201', 'K7L 3N6') is True
+                    'real_u1', '12345Aa#') is True
 
     # If curr_name does not exist, cannot update
-    assert update_user('invalid_username', 'updated_username', 'new@test.com',
-                       'address', 'K7L 3N6') is False
+    assert update_user('invalid_username', 'updated_username', 'new@test.com') is False
 
     # If new name does not have proper format, cannot update
-    assert update_user('original username', '  my new name   ', 'new@test.com',
-                       'address', 'K7L 3N6') is False
+    assert update_user('original username', '  my new name   ', 'new@test.com') is False
     assert update_user('original_username',
-                       'aaaaaaaaaaaaaaaaaaaaa', 'new@test.com',
-                       'address', 'K7L 3N6') is False
+                       'aaaaaaaaaaaaaaaaaaaaa', 'new@test.com') is False
 
     # If new email does not have proper format, cannot update
-    assert update_user('original username', 'new_user', '',
-                       'address', 'K7L 3N6') is False
+    assert update_user('original username', 'new_user', '') is False
 
     # If new postal code does not have proper format, cannot update
-    assert update_user('original username', 'new_user', 'new@test.com',
-                       'address', 'K7L') is False
+    assert update_user('original username', 'new_user', 'new@test.com') is False
 
     # If the new username/email already exists, cannot update
     assert update_user('original username',
-                       'original username', 'new@test.com',
-                       'address', 'K7L 3N6') is False
-    assert update_user('original username', 'new user', 'user@test.com',
-                       'address', 'K7L 3N6') is False
+                       'original username', 'new@test.com') is False
+    assert update_user('original username', 'new user', 'user@test.com') is False
 
     # Valid update
     assert update_user('original username', 'new username',
-                       'new@test.com', 'address', 'K7L 3N5') is True
+                       'new@test.com') is True
 
     # Ensure all fields were updated properly
     user = login('new@test.com', '12345Aa#')
     assert user is not None
     assert user.username == 'new username'
-    assert user.billing_address == 'address'
-    assert user.postal_code == 'K7L 3N5'
