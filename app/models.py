@@ -424,3 +424,61 @@ def postal_code_check(postal_code):
         return False
     else:
         return True
+
+
+def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
+    '''
+    R5-1, R5-2, R5-4: Can only update title, desc, and price
+    Parameters:
+        new_title   (String):   updated title
+        new_desc    (String):   updated description
+        curr_price  (float):    original price
+        new_price   (float):    updated price
+        owner_id    (int):      owner's id
+    Returns:
+        True if the update is successful, False otherwise
+    '''
+
+    # Check if the listing exists using the owner_id
+    listing = Listing.query.filter_by(id=owner_id).all()
+    if len(listing) > 0:
+        # Check if the format of the new information is correct
+        if (alphanumeric_check(new_title) and
+                length_check(new_title, 0, 80) and 
+                length_check(new_desc, 20, 2000)
+                and description_length_check(new_desc, new_title) and
+                range_check(new_price, curr_price, 10000) and
+                unique_title_check(new_title)):
+
+            # Update title, description and price
+            listing[0].title = new_title
+            listing[0].description = new_desc
+            listing[0].price = new_price
+
+            # When the update operations are successful,
+            # update the modified date
+            # Check if the new date format is correct
+            if (date_check(date.today(), date(2021, 1, 2), date(2025, 1, 2))):
+                # Update the modified date
+                listing[0].last_modified_date = date.today()
+                db.session.commit()
+                return True
+            
+            # Modified date does not follow requirements
+            else:
+                return False
+            
+        # New information does not follow required format
+        else:
+            return False
+        
+    # Listing does not exist
+    return False
+
+
+# Returns the listing when the owner id is passed in
+def find_listing(owner_id):
+    listing = Listing.query.filter_by(id=owner_id).all()
+    if len(listing) > 0:
+        return listing[0]
+    return False
