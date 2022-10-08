@@ -1,5 +1,5 @@
 from app.models import alphanumeric_check, email_check, \
-    create_listing, postal_code_check, \
+    create_listing, not_empty, postal_code_check, \
     unique_title_check, owner_check, length_check, pw_check, \
     range_check, register, login, description_length_check, \
     date_check, update_user
@@ -11,9 +11,33 @@ def test_r1_7_user_register():
     Testing R1-7: If the email has been used, the operation failed.
     '''
 
-    assert register('u0', 'test0@test.com', 'real_u1', '12345Aa#') is True
-    assert register('u1', 'test1@test.com', 'real_u2', '123456') is True
-    assert register('u2', 'test1@test.com', 'real_u3', '123456') is False
+    # Empty passwords/emails
+    assert register('u00', '', 'real_u1', '') is False
+    assert register('u10', 'test1@test.com', 'real_u1', '') is False
+    assert register('u20', '', 'real_u3', '12345Aa#') is False
+
+    # Invalid email
+    assert register('u30', 'Invalid email', 'real_u4', '12345Aa#') is False
+
+    # Invalid passwords
+    assert register('u40', 'test2@test.com', 'real_u4', '12') is False
+    assert register('u50', 'test3@test.com', 'real_u5', '123456') is False
+    assert register('u60', 'test4@test.com', 'real_u6', '123456A') is False
+    assert register('u70', 'test5@test.com', 'real_u7', '123456a') is False
+    assert register('u80', 'test6@test.com', 'real_u8', '123456a') is False
+
+    # Valid register
+    assert register('u90', 'test0@test.com', 'real_u9', '12345Aa#') is True
+
+    # Invalid usernames
+    assert register('u', 'test7@test.com', 'real_u10', '123456Aa#') is False
+    assert register('u100u100u100u100u100u100u100', 'test6@test.com', 'real_u',
+                    '123456a') is False
+    assert register(' u', 'test8@test.com', 'real_u11', '123456a') is False
+    assert register('u ', 'test9@test.com', 'real_u12', '123456a') is False
+
+    # Same username error
+    assert register('u90', 'test0@test.com', 'real_u9', '12345Aa#') is False
 
 
 def test_r2_1_login():
@@ -29,7 +53,7 @@ def test_r2_1_login():
 
     user = login('test0@test.com', '12345Aa#')
     assert user is not None
-    assert user.username == 'u0'
+    assert user.username == 'u90'
 
     user = login('test0@test.com', '123457Aa#')
     assert user is None
@@ -222,29 +246,52 @@ def test_r3_1_update_user():
                     'real_u1', '12345Aa#') is True
 
     # If curr_name does not exist, cannot update
-    assert update_user('invalid_username', 'updated_username', 'new@test.com') is False
+    assert update_user('invalid_username', 'updated_username', 'new@test.com',
+                       'address', 'K7L 3N6') is False
 
     # If new name does not have proper format, cannot update
-    assert update_user('original username', '  my new name   ', 'new@test.com') is False
+    assert update_user('original username', '  my new name   ', 'new@test.com',
+                       'address', 'K7L 3N6') is False
     assert update_user('original_username',
-                       'aaaaaaaaaaaaaaaaaaaaa', 'new@test.com') is False
+                       'aaaaaaaaaaaaaaaaaaaaa', 'new@test.com',
+                       'address', 'K7L 3N6') is False
 
     # If new email does not have proper format, cannot update
-    assert update_user('original username', 'new_user', '') is False
+    assert update_user('original username', 'new_user', '',
+                       'address', 'K7L 3N6') is False
 
     # If new postal code does not have proper format, cannot update
-    assert update_user('original username', 'new_user', 'new@test.com') is False
+    assert update_user('original username', 'new_user', 'new@test.com',
+                       'address', 'K7L') is False
 
     # If the new username/email already exists, cannot update
     assert update_user('original username',
-                       'original username', 'new@test.com') is False
-    assert update_user('original username', 'new user', 'user@test.com') is False
+                       'original username', 'new@test.com',
+                       'address', 'K7L 3N6') is False
+    assert update_user('original username', 'new user', 'user@test.com',
+                       'address', 'K7L 3N6') is False
 
     # Valid update
     assert update_user('original username', 'new username',
-                       'new@test.com') is True
+                       'new@test.com', 'address', 'K7L 3N5') is True
 
     # Ensure all fields were updated properly
     user = login('new@test.com', '12345Aa#')
     assert user is not None
     assert user.username == 'new username'
+
+
+def test_r1_4_user_pass():
+    assert length_check("Lo", 3, 20) is False
+
+
+def test_r1_6_user_length():
+    assert length_check("Lo", 3, 20) is False
+    assert length_check("Lorem ipsum dolor s", 3, 20) is True
+    assert length_check("Lorem ipsum dolor si", 3, 20) is True
+    assert length_check("Lorem ipsum dolor sit", 3, 20) is False
+
+
+def test_r1_1_empty():
+    assert not_empty('') is False
+    assert not_empty('Lo') is True

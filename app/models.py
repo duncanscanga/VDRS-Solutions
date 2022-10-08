@@ -147,6 +147,29 @@ def register(name, email, real_name, password):
     if len(existed) > 0:
         return False
 
+    # check if the email and password are not empty:
+    if not not_empty(email) and not not_empty(password):
+        return False
+
+    # Check that the email has to follow addr-spec defined in RFC 5322
+    if not email_check(email):
+        return False
+
+    # Check that the password has to meet the required complexity:
+    # minimum length 6, at least one upper case, at least one lower
+    # case, and at least one special character.
+    if not pw_check(password):
+        return False
+
+    # Check that has to be non-empty, alphanumeric-only,
+    # and space allowed only if it is not as the prefix or suffix
+    if not alphanumeric_check(name):
+        return False
+
+    # Check that user name is longer than 2 but less than 20
+    if not length_check(name, 3, 20):
+        return False
+
     # create a new user
     user = User(username=name, email=email, real_name=real_name, balance=100,
                 password=password, billing_address='',
@@ -425,15 +448,12 @@ def postal_code_check(postal_code):
     else:
         return True
 
-def empty(word):
+
+def not_empty(word):
     '''
     Checks R1-1 if the email
     or password is empty
     '''
     if len(word) == 0:
-        return True
-    return False
-
-    
-
-
+        return False
+    return True

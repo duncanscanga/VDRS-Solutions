@@ -9,6 +9,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 db = SQLAlchemy(app)
 
+
 class Property(db.Model):
     """A class to represent a qB&B property."""
 
@@ -85,4 +86,3 @@ class User(db.Model):
 
     def __repr__(self):
         return "<User %r>" % self.id
-
