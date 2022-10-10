@@ -7,19 +7,18 @@ from datetime import date
 
 
 def test_r1_7_user_register():
-    '''
-    Testing R1-7: If the email has been used, the operation failed.
-    '''
 
-    # Empty passwords/emails
+    # R1-1: Email cannot be empty. password cannot be empty.
     assert register('u00', '', 'real_u1', '') is False
     assert register('u10', 'test1@test.com', 'real_u1', '') is False
     assert register('u20', '', 'real_u3', '12345Aa#') is False
 
-    # Invalid email
+    # R1-3:The email has to follow addr-spec defined in RFC 5322
     assert register('u30', 'Invalid email', 'real_u4', '12345Aa#') is False
 
-    # Invalid passwords
+    # R1-4: Password has to meet the required complexity: minimum length 6,
+    # at least one upper case, at least one lower case and at least one
+    # special character.
     assert register('u40', 'test2@test.com', 'real_u4', '12') is False
     assert register('u50', 'test3@test.com', 'real_u5', '123456') is False
     assert register('u60', 'test4@test.com', 'real_u6', '123456A') is False
@@ -29,13 +28,19 @@ def test_r1_7_user_register():
     # Valid register
     assert register('u90', 'test0@test.com', 'real_u9', '12345Aa#') is True
 
-    # Invalid usernames
-    assert register('u', 'test7@test.com', 'real_u10', '123456Aa#') is False
-    assert register('u100u100u100u100u100u100u100', 'test6@test.com', 'real_u',
-                    '123456a') is False
+    # R1-5: User name has to be non-empty, alphanumeric-only, and space allowed
+    # only if it is not as the prefix or suffix.
     assert register(' u', 'test8@test.com', 'real_u11', '123456a') is False
     assert register('u ', 'test9@test.com', 'real_u12', '123456a') is False
 
+    # R1-6: User name has to be longer than 2 characters and less than
+    # 20 characters.
+    assert register('u', 'test7@test.com', 'real_u10', '123456Aa#') is False
+    assert register('u100u100u100u100u100u100u100', 'test6@test.com', 'real_u',
+                    '123456a') is False
+    '''
+    Testing R1-7: If the email has been used, the operation failed.
+    '''
     # Same username error
     assert register('u90', 'test0@test.com', 'real_u9', '12345Aa#') is False
 

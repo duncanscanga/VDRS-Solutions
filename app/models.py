@@ -170,6 +170,12 @@ def register(name, email, real_name, password):
     if not length_check(name, 3, 20):
         return False
 
+    '''
+    R1-8: Shipping address is empty at the time of registration.
+    R1-9: Postal code is empty at the time of registration.
+    R1-10: Balance should be initialized as 100 at the time of registration.
+    (free $100 dollar signup bonus).
+    '''
     # create a new user
     user = User(username=name, email=email, real_name=real_name, balance=100,
                 password=password, billing_address='',
