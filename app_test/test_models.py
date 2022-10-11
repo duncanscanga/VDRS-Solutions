@@ -38,11 +38,23 @@ def test_r1_7_user_register():
     assert register('u', 'test7@test.com', 'real_u10', '123456Aa#') is False
     assert register('u100u100u100u100u100u100u100', 'test6@test.com', 'real_u',
                     '123456a') is False
-    '''
-    Testing R1-7: If the email has been used, the operation failed.
-    '''
-    # Same username error
-    assert register('u90', 'test0@test.com', 'real_u9', '12345Aa#') is False
+
+    # R1-7: If the email has been used, the operation failed.
+    assert register('u100', 'test0@test.com', 'real_u9', '12345Aa#') is False
+
+    # R1-8: Shipping address is empty at the time of registration.
+    user = login('test0@test.com', '12345Aa#')
+    user.billing_address == ''
+
+    # R1-9: Postal code is empty at the time of registration.
+    user = login('test0@test.com', '12345Aa#')
+    user.postal_code == ''
+
+    # R1-10:  Balance should be initialized as 100 at
+    # the time of registration. (free $100 dollar signup bonus).
+    user = login('test0@test.com', '12345Aa#')
+    user.balance == 100
+
 
 
 def test_r2_1_login():
@@ -245,8 +257,6 @@ def test_r3_1_update_user():
     billing address, and postal code.
     '''
     # Start by registering a user
-    # (postal code added since register method requires it,
-    # must be removed later R1-9)
     assert register('original username', 'user@test.com',
                     'real_u1', '12345Aa#') is True
 
@@ -285,18 +295,19 @@ def test_r3_1_update_user():
     assert user is not None
     assert user.username == 'new username'
 
-
-def test_r1_4_user_pass():
-    assert length_check("Lo", 3, 20) is False
-
-
+'''
+Testing R1-6: User name has to be longer than 2 characters
+and less than 20 characters.
+'''
 def test_r1_6_user_length():
     assert length_check("Lo", 3, 20) is False
     assert length_check("Lorem ipsum dolor s", 3, 20) is True
     assert length_check("Lorem ipsum dolor si", 3, 20) is True
     assert length_check("Lorem ipsum dolor sit", 3, 20) is False
 
-
+'''
+Testing R1-1: User name and password cannot be empty.
+'''
 def test_r1_1_empty():
     assert not_empty('') is False
     assert not_empty('Lo') is True
