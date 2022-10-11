@@ -1,5 +1,5 @@
 from app.models import alphanumeric_check, email_check, \
-    create_listing, postal_code_check, \
+    create_listing, not_empty, postal_code_check, \
     unique_title_check, owner_check, length_check, pw_check, \
     range_check, register, login, description_length_check, \
     date_check, update_user, update_listing, find_listing
@@ -7,16 +7,51 @@ from datetime import date
 
 
 def test_r1_7_user_register():
-    '''
-    Testing R1-7: If the email has been used, the operation failed.
-    '''
 
-    assert register('u0', 'test0@test.com', 'real_u1', '12345Aa#',
-                    '1209 King St W Suite 201', 'K7L 3N6') is True
-    assert register('u1', 'test1@test.com', 'real_u2', '123456',
-                    '1209 King St W Suite 201', 'K7L 3N6') is True
-    assert register('u2', 'test1@test.com', 'real_u3', '123456',
-                    '1209 King St W Suite 201', 'K7L 3N6') is False
+    # R1-1: Email cannot be empty. password cannot be empty.
+    assert register('u00', '', 'real_u1', '') is False
+    assert register('u10', 'test1@test.com', 'real_u1', '') is False
+    assert register('u20', '', 'real_u3', '12345Aa#') is False
+
+    # R1-3:The email has to follow addr-spec defined in RFC 5322
+    assert register('u30', 'Invalid email', 'real_u4', '12345Aa#') is False
+
+    # R1-4: Password has to meet the required complexity: minimum length 6,
+    # at least one upper case, at least one lower case and at least one
+    # special character.
+    assert register('u40', 'test2@test.com', 'real_u4', '12') is False
+    assert register('u50', 'test3@test.com', 'real_u5', '123456') is False
+    assert register('u60', 'test4@test.com', 'real_u6', '123456A') is False
+    assert register('u70', 'test5@test.com', 'real_u7', '123456a') is False
+    assert register('u80', 'test6@test.com', 'real_u8', '123456a') is False
+
+    # Valid register
+    assert register('u90', 'test0@test.com', 'real_u9', '12345Aa#') is True
+
+    # R1-5: User name has to be non-empty, alphanumeric-only, and space allowed
+    # only if it is not as the prefix or suffix.
+    assert register(' u', 'test8@test.com', 'real_u11', '123456a') is False
+    assert register('u ', 'test9@test.com', 'real_u12', '123456a') is False
+
+    # R1-6: User name has to be longer than 2 characters and less than
+    # 20 characters.
+    assert register('u', 'test7@test.com', 'real_u10', '123456Aa#') is False
+    assert register('u100u100u100u100u100u100u100', 'test6@test.com', 'real_u',
+                    '123456a') is False
+
+    # R1-7: If the email has been used, the operation failed.
+    assert register('u100', 'test0@test.com', 'real_u9', '12345Aa#') is False
+
+    # R1-8: Shipping address is empty at the time of registration.
+    user = login('test0@test.com', '12345Aa#')
+    assert user.billing_address == ''
+
+    # R1-9: Postal code is empty at the time of registration.
+    assert user.postal_code == ''
+
+    # R1-10:  Balance should be initialized as 100 at
+    # the time of registration. (free $100 dollar signup bonus).
+    assert user.balance == 100
 
 
 def test_r2_1_login():
@@ -32,7 +67,7 @@ def test_r2_1_login():
 
     user = login('test0@test.com', '12345Aa#')
     assert user is not None
-    assert user.username == 'u0'
+    assert user.username == 'u90'
 
     user = login('test0@test.com', '123457Aa#')
     assert user is None
@@ -219,11 +254,8 @@ def test_r3_1_update_user():
     billing address, and postal code.
     '''
     # Start by registering a user
-    # (postal code added since register method requires it,
-    # must be removed later R1-9)
     assert register('original username', 'user@test.com',
-                    'real_u1', '12345Aa#',
-                    '1209 King St W Suite 201', 'K7L 3N6') is True
+                    'real_u1', '12345Aa#') is True
 
     # If curr_name does not exist, cannot update
     assert update_user('invalid_username', 'updated_username', 'new@test.com',
@@ -259,8 +291,25 @@ def test_r3_1_update_user():
     user = login('new@test.com', '12345Aa#')
     assert user is not None
     assert user.username == 'new username'
-    assert user.billing_address == 'address'
-    assert user.postal_code == 'K7L 3N5'
+
+
+def test_r1_6_user_length():
+    '''
+    Testing R1-6: User name has to be longer than 2 characters
+    and less than 20 characters.
+    '''
+    assert length_check("Lo", 3, 20) is False
+    assert length_check("Lorem ipsum dolor s", 3, 20) is True
+    assert length_check("Lorem ipsum dolor si", 3, 20) is True
+    assert length_check("Lorem ipsum dolor sit", 3, 20) is False
+
+
+def test_r1_1_empty():
+    '''
+    Testing R1-1: User name and password cannot be empty.
+    '''
+    assert not_empty('') is False
+    assert not_empty('Lo') is True
 
 
 def test_r5_1_update_listing():
@@ -272,27 +321,27 @@ def test_r5_1_update_listing():
     create_listing("Titleunique", "This is a description.", 150, 1) is True
 
     # Cannot update if the owner_id does not exist
-    assert update_listing("Newesttitle", "This is a short description.", 
+    assert update_listing("Newesttitle", "This is a short description.",
                           150, 153, 123) is False
 
     # Cannot update if the title format is not correct
-    assert update_listing("The title is longer than the description", 
+    assert update_listing("The title is longer than the description",
                           "This is a short description.", 150, 153, 1) is False
 
     # Cannot update if the description format is not correct
     assert update_listing("title", "too short", 150, 153, 1) is False
 
     # Cannot update if the new price is lower than the original price
-    assert update_listing("Newesttitle", 
+    assert update_listing("Newesttitle",
                           "This is a short description.", 150, 20, 1) is False
 
     # Update is successful if all the requirements are passed
-    assert update_listing("Newest Title", 
-                          "This is a short description. description", 
+    assert update_listing("Newest Title",
+                          "This is a short description. description",
                           150, 153, 1) is True
-    
+
     # Check if the update is successful
-    listing = find_listing(1) 
+    listing = find_listing(1)
     assert listing is not None
     assert listing.title == 'Newest Title'
     assert listing.description == 'This is a short description. description'

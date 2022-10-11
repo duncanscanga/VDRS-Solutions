@@ -132,7 +132,7 @@ class Review(db.Model):
 db.create_all()
 
 
-def register(name, email, real_name, password, billing_address, postal_code):
+def register(name, email, real_name, password):
     '''
     Register a new user
       Parameters:
@@ -147,10 +147,39 @@ def register(name, email, real_name, password, billing_address, postal_code):
     if len(existed) > 0:
         return False
 
+    # check if the email and password are not empty:
+    if not not_empty(email) and not not_empty(password):
+        return False
+
+    # Check that the email has to follow addr-spec defined in RFC 5322
+    if not email_check(email):
+        return False
+
+    # Check that the password has to meet the required complexity:
+    # minimum length 6, at least one upper case, at least one lower
+    # case, and at least one special character.
+    if not pw_check(password):
+        return False
+
+    # Check that has to be non-empty, alphanumeric-only,
+    # and space allowed only if it is not as the prefix or suffix
+    if not alphanumeric_check(name):
+        return False
+
+    # Check that user name is longer than 2 but less than 20
+    if not length_check(name, 3, 20):
+        return False
+
+    '''
+    R1-8: Shipping address is empty at the time of registration.
+    R1-9: Postal code is empty at the time of registration.
+    R1-10: Balance should be initialized as 100 at the time of registration.
+    (free $100 dollar signup bonus).
+    '''
     # create a new user
-    user = User(username=name, email=email, real_name=real_name, balance=0,
-                password=password, billing_address=billing_address,
-                postal_code=postal_code)
+    user = User(username=name, email=email, real_name=real_name, balance=100,
+                password=password, billing_address='',
+                postal_code='')
     # add it to the current database session
     db.session.add(user)
     # actually save the user object
@@ -426,6 +455,16 @@ def postal_code_check(postal_code):
         return True
 
 
+def not_empty(word):
+    '''
+    Checks R1-1 if the email
+    or password is empty
+    '''
+    if len(word) == 0:
+        return False
+    return True
+
+
 def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
     '''
     R5-1, R5-2, R5-4: Can only update title, desc, and price
@@ -444,7 +483,7 @@ def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
     if len(listing) > 0:
         # Check if the format of the new information is correct
         if (alphanumeric_check(new_title) and
-                length_check(new_title, 0, 80) and 
+                length_check(new_title, 0, 80) and
                 length_check(new_desc, 20, 2000)
                 and description_length_check(new_desc, new_title) and
                 range_check(new_price, curr_price, 10000) and
@@ -463,15 +502,15 @@ def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
                 listing[0].last_modified_date = date.today()
                 db.session.commit()
                 return True
-            
+
             # Modified date does not follow requirements
             else:
                 return False
-            
+
         # New information does not follow required format
         else:
             return False
-        
+
     # Listing does not exist
     return False
 
