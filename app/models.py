@@ -58,7 +58,6 @@ class Listing(db.Model):
     def __repr__(self):
         return "<Listing %r>" % self.id
 
-
 class Booking(db.Model):
     """A class to represent a qB&B Booking."""
 
