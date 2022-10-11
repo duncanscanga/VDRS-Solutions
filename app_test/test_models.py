@@ -44,16 +44,14 @@ def test_r1_7_user_register():
 
     # R1-8: Shipping address is empty at the time of registration.
     user = login('test0@test.com', '12345Aa#')
-    user.billing_address == ''
+    assert user.billing_address == ''
 
     # R1-9: Postal code is empty at the time of registration.
-    user = login('test0@test.com', '12345Aa#')
-    user.postal_code == ''
+    assert user.postal_code == ''
 
     # R1-10:  Balance should be initialized as 100 at
     # the time of registration. (free $100 dollar signup bonus).
-    user = login('test0@test.com', '12345Aa#')
-    user.balance == 100
+    assert user.balance == 100
 
 
 def test_r2_1_login():
