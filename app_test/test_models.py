@@ -56,7 +56,6 @@ def test_r1_7_user_register():
     user.balance == 100
 
 
-
 def test_r2_1_login():
     '''
     Testing R2-1: A user can log in using her/his email address
@@ -295,20 +294,22 @@ def test_r3_1_update_user():
     assert user is not None
     assert user.username == 'new username'
 
-'''
-Testing R1-6: User name has to be longer than 2 characters
-and less than 20 characters.
-'''
+
 def test_r1_6_user_length():
+    '''
+    Testing R1-6: User name has to be longer than 2 characters
+    and less than 20 characters.
+    '''
     assert length_check("Lo", 3, 20) is False
     assert length_check("Lorem ipsum dolor s", 3, 20) is True
     assert length_check("Lorem ipsum dolor si", 3, 20) is True
     assert length_check("Lorem ipsum dolor sit", 3, 20) is False
 
-'''
-Testing R1-1: User name and password cannot be empty.
-'''
+
 def test_r1_1_empty():
+    '''
+    Testing R1-1: User name and password cannot be empty.
+    '''
     assert not_empty('') is False
     assert not_empty('Lo') is True
 
