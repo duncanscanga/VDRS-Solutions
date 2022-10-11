@@ -454,6 +454,7 @@ def postal_code_check(postal_code):
     else:
         return True
 
+
 def not_empty(word):
     '''
     Checks R1-1 if the email
@@ -462,7 +463,8 @@ def not_empty(word):
     if len(word) == 0:
         return False
     return True
-    
+
+
 def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
     '''
     R5-1, R5-2, R5-4: Can only update title, desc, and price
@@ -481,7 +483,7 @@ def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
     if len(listing) > 0:
         # Check if the format of the new information is correct
         if (alphanumeric_check(new_title) and
-                length_check(new_title, 0, 80) and 
+                length_check(new_title, 0, 80) and
                 length_check(new_desc, 20, 2000)
                 and description_length_check(new_desc, new_title) and
                 range_check(new_price, curr_price, 10000) and
@@ -500,15 +502,15 @@ def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
                 listing[0].last_modified_date = date.today()
                 db.session.commit()
                 return True
-            
+
             # Modified date does not follow requirements
             else:
                 return False
-            
+
         # New information does not follow required format
         else:
             return False
-        
+
     # Listing does not exist
     return False
 
