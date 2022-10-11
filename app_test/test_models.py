@@ -285,8 +285,10 @@ def test_r3_1_update_user():
     assert user is not None
     assert user.username == 'new username'
 
+
 def test_r1_4_user_pass():
     assert length_check("Lo", 3, 20) is False
+
 
 def test_r1_6_user_length():
     assert length_check("Lo", 3, 20) is False
@@ -294,12 +296,11 @@ def test_r1_6_user_length():
     assert length_check("Lorem ipsum dolor si", 3, 20) is True
     assert length_check("Lorem ipsum dolor sit", 3, 20) is False
 
+
 def test_r1_1_empty():
     assert not_empty('') is False
     assert not_empty('Lo') is True
 
-    assert user.billing_address == 'address'
-    assert user.postal_code == 'K7L 3N5'
 
 def test_r5_1_update_listing():
     '''
@@ -310,27 +311,27 @@ def test_r5_1_update_listing():
     create_listing("Titleunique", "This is a description.", 150, 1) is True
 
     # Cannot update if the owner_id does not exist
-    assert update_listing("Newesttitle", "This is a short description.", 
+    assert update_listing("Newesttitle", "This is a short description.",
                           150, 153, 123) is False
 
     # Cannot update if the title format is not correct
-    assert update_listing("The title is longer than the description", 
+    assert update_listing("The title is longer than the description",
                           "This is a short description.", 150, 153, 1) is False
 
     # Cannot update if the description format is not correct
     assert update_listing("title", "too short", 150, 153, 1) is False
 
     # Cannot update if the new price is lower than the original price
-    assert update_listing("Newesttitle", 
+    assert update_listing("Newesttitle",
                           "This is a short description.", 150, 20, 1) is False
 
     # Update is successful if all the requirements are passed
-    assert update_listing("Newest Title", 
-                          "This is a short description. description", 
+    assert update_listing("Newest Title",
+                          "This is a short description. description",
                           150, 153, 1) is True
-    
+
     # Check if the update is successful
-    listing = find_listing(1) 
+    listing = find_listing(1)
     assert listing is not None
     assert listing.title == 'Newest Title'
     assert listing.description == 'This is a short description. description'
