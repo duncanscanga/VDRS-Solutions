@@ -7,7 +7,7 @@ from app import app
 def authenticate(inner_function):
     """
     :param inner_function: any python function that accepts a user object
-    Wrap any python function and check the current session to see if 
+    Wrap any python function and check the current session to see if
     the user has logged in. If login, it will call the inner_function
     with the logged in user object.
     To wrap a function, we can put a decoration on that function.
@@ -51,12 +51,12 @@ def login_post():
     if user:
         session['logged_in'] = user.email
         """
-        Session is an object that contains sharing information 
-        between a user's browser and the end server. 
-        Typically it is packed and stored in the browser cookies. 
-        They will be past along between every request the browser made 
-        to this services. Here we store the user object into the 
-        session, so we can tell if the client has already login 
+        Session is an object that contains sharing information
+        between a user's browser and the end server.
+        Typically it is packed and stored in the browser cookies.
+        They will be past along between every request the browser made
+        to this services. Here we store the user object into the
+        session, so we can tell if the client has already login
         in the following sessions.
         """
         # success! go back to the home page
