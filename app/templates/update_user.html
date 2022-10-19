@@ -1,1 +1,10 @@
 {% extends 'base.html' %}
+
+{% block content %}
+<h2 class="wrapper">
+    {{ user.username }}
+    {{ user.email }}
+    {{ user.billing_address }}
+    {{ user.postal_code }}
+</h2>
+{% endblock %}

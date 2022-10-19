@@ -35,6 +35,9 @@ def authenticate(inner_function):
             return redirect('/login')
 
     # return the wrapped version of the inner_function:
+    # Changed: ensure unique wrapper by using function name
+    # to avoid overwriting error.
+    wrapped_inner.__name__ = inner_function.__name__
     return wrapped_inner
 
 
@@ -122,11 +125,16 @@ def logout():
 
 # Route to send the user update template
 @app.route('/update-user', methods=['GET'])
-def get_update_user():
-    return render_template('update_user.html')
+@authenticate
+def get_update_user(user):
+    
+    # Return the template with the user's current information
+    return render_template('update_user.html', user=user)
 
 
+# def update_user(curr_name, new_name, new_email, new_addr, new_postal):
 # Route to receive the updated user information
 @app.route('/update-user', methods=['POST'])
 def post_update_user():
+    # curr_name = request.form.get('curr_name')
     pass
