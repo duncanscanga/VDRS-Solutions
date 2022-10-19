@@ -409,12 +409,14 @@ def update_user(curr_name, new_name, new_email, new_addr, new_postal):
         ):
 
             # We then check if the new username and email are unique:
-            # However, if the user didn't update their existing names or passwords,
+            # If the user didn't update their existing names/passwords,
             # the query will return 1, which is ok (it's their record),
             # so ensure that the name and email have indeed been updated.
             if (
-                ((len(User.query.filter_by(username=new_name).all()) > 0) and valid[0].username != new_name) or
-                ((len(User.query.filter_by(email=new_email).all()) > 0) and valid[0].email != new_email)
+                ((len(User.query.filter_by(username=new_name).all()) > 0)
+                    and valid[0].username != new_name) or
+                ((len(User.query.filter_by(email=new_email).all()) > 0)
+                    and valid[0].email != new_email)
             ):
                 return False
             # If they're unique, update all the fields

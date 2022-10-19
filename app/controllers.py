@@ -127,7 +127,6 @@ def logout():
 @app.route('/update-user', methods=['GET'])
 @authenticate
 def get_update_user(user):
-    
     # Return the template with the user's current information
     return render_template('update_user.html', user=user)
 
