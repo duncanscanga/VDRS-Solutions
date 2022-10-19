@@ -1,6 +1,6 @@
 from app import app
-# from app.models import *
-# from app.controllers import *
+from app.models import *
+from app.controllers import *
 
 """
 This file runs the server on port 8081

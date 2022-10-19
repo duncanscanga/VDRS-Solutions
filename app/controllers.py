@@ -101,7 +101,8 @@ def register_post():
         error_message = "The passwords do not match"
     else:
         # use backend api to register the user
-        success = register(name, email, password)
+        # Added real_name field to satisfy register() method in models.py
+        success = register(name, email, "My Real Name", password)
         if not success:
             error_message = "Registration failed."
     # if there is any error messages when registering new user
@@ -117,3 +118,15 @@ def logout():
     if 'logged_in' in session:
         session.pop('logged_in', None)
     return redirect('/')
+
+
+# Route to send the user update template
+@app.route('/update-user', methods=['GET'])
+def get_update_user():
+    return render_template('update_user.html')
+
+
+# Route to receive the updated user information
+@app.route('/update-user', methods=['POST'])
+def post_update_user():
+    pass
