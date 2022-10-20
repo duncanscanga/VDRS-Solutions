@@ -190,11 +190,10 @@ def post_update_listing(listing_id):
             msg="Update Failed!")
 
 
-# Route to send the listing update template
+# Route to create a new listing
 @app.route('/create-listing', methods=['GET'])
 @authenticate
 def get_create_listing(user):
-    # Return the template with the listing's current information
     return render_template(
         'create_listing.html',
         user=user,
