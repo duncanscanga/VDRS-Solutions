@@ -356,3 +356,6 @@ def test_find_listing_by_id():
     assert find_listing_by_title("Some Title")[0].title == "Some Title"
     assert find_listing_by_id(find_listing_by_title("Some Title")
                               [0].id)[0].title == "Some Title"
+    assert find_listing_by_title("Some Title")[0].title != "Title"
+    assert find_listing_by_id(find_listing_by_title("Some Title")
+                              [0].id)[0].title != "Title"
