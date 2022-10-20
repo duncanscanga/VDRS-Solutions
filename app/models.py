@@ -402,7 +402,7 @@ def update_user(curr_name, new_name, new_email, new_addr, new_postal):
     if len(valid) == 1:
         # We check if the new information is of a valid format
         if (
-            postal_code_check(new_postal) and
+            (postal_code_check(new_postal) or len(new_postal) == 0) and
             email_check(new_email) and
             alphanumeric_check(new_name) and
             length_check(new_name, 3, 19)

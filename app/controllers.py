@@ -1,5 +1,5 @@
 from flask import render_template, request, session, redirect
-from app.models import login, User, register
+from app.models import login, User, register, update_user
 
 from app import app
 
@@ -128,12 +128,33 @@ def logout():
 @authenticate
 def get_update_user(user):
     # Return the template with the user's current information
-    return render_template('update_user.html', user=user)
+    return render_template(
+        'update_user.html',
+        user=user,
+        msg="Please modify the information you want to update below."
+        )
 
 
-# def update_user(curr_name, new_name, new_email, new_addr, new_postal):
 # Route to receive the updated user information
 @app.route('/update-user', methods=['POST'])
-def post_update_user():
-    # curr_name = request.form.get('curr_name')
-    pass
+@authenticate
+def post_update_user(user):
+    # First grab form data
+    curr_name = user.username
+    new_name = request.form.get('name')
+    new_email = request.form.get('email')
+    new_addr = request.form.get('billing-address')
+    new_postal = request.form.get('postal-code')
+
+    # Evaluate if the update was successful:
+    success = update_user(curr_name, new_name, new_email, new_addr, new_postal)
+    # If so, return to home page
+    # If not, stay on update_user.html with error msg
+    if success:
+        return redirect('/')
+    else:
+        return render_template(
+            'update_user.html',
+            user=user,
+            msg="Update Failed!"
+            )
