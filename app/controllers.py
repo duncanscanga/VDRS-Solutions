@@ -131,8 +131,7 @@ def get_update_user(user):
     return render_template(
         'update_user.html',
         user=user,
-        msg="Please modify the information you want to update below."
-        )
+        msg="Please modify the information you want to update below.")
 
 
 # Route to receive the updated user information
@@ -156,5 +155,4 @@ def post_update_user(user):
         return render_template(
             'update_user.html',
             user=user,
-            msg="Update Failed!"
-            )
+            msg="Update Failed!")
