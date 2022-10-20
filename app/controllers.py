@@ -218,6 +218,6 @@ def post_create_listing(user):
     if success:
         return redirect('/')
     return render_template(
-            'create_listing.html',
-            user=user,
-            msg="Creation Failed!")
+        'create_listing.html',
+        user=user,
+        msg="Creation Failed!")
