@@ -276,11 +276,11 @@ def test_r3_1_update_user():
     assert update_user('original username', 'new_user', 'new@test.com',
                        'address', 'K7L') is False
 
-    # If the new username/email already exists, cannot update
+    # If the new username/email already exists from another user, cannot update
     assert update_user('original username',
-                       'original username', 'new@test.com',
+                       'original username', 'test0@test.com',
                        'address', 'K7L 3N6') is False
-    assert update_user('original username', 'new user', 'user@test.com',
+    assert update_user('original username', 'u90', 'user@test.com',
                        'address', 'K7L 3N6') is False
 
     # Valid update

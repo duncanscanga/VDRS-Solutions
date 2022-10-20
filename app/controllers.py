@@ -1,5 +1,5 @@
 from flask import render_template, request, session, redirect
-from app.models import login, User, register
+from app.models import login, User, register, update_user
 
 from app import app
 
@@ -35,6 +35,9 @@ def authenticate(inner_function):
             return redirect('/login')
 
     # return the wrapped version of the inner_function:
+    # Changed: ensure unique wrapper by using function name
+    # to avoid overwriting error.
+    wrapped_inner.__name__ = inner_function.__name__
     return wrapped_inner
 
 
@@ -101,7 +104,8 @@ def register_post():
         error_message = "The passwords do not match"
     else:
         # use backend api to register the user
-        success = register(name, email, password)
+        # Added real_name field to satisfy register() method in models.py
+        success = register(name, email, "My Real Name", password)
         if not success:
             error_message = "Registration failed."
     # if there is any error messages when registering new user
@@ -117,3 +121,38 @@ def logout():
     if 'logged_in' in session:
         session.pop('logged_in', None)
     return redirect('/')
+
+
+# Route to send the user update template
+@app.route('/update-user', methods=['GET'])
+@authenticate
+def get_update_user(user):
+    # Return the template with the user's current information
+    return render_template(
+        'update_user.html',
+        user=user,
+        msg="Please modify the information you want to update below.")
+
+
+# Route to receive the updated user information
+@app.route('/update-user', methods=['POST'])
+@authenticate
+def post_update_user(user):
+    # First grab form data
+    curr_name = user.username
+    new_name = request.form.get('name')
+    new_email = request.form.get('email')
+    new_addr = request.form.get('billing-address')
+    new_postal = request.form.get('postal-code')
+
+    # Evaluate if the update was successful:
+    success = update_user(curr_name, new_name, new_email, new_addr, new_postal)
+    # If so, return to home page
+    # If not, stay on update_user.html with error msg
+    if success:
+        return redirect('/')
+    else:
+        return render_template(
+            'update_user.html',
+            user=user,
+            msg="Update Failed!")

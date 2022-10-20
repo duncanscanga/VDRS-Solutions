@@ -402,16 +402,21 @@ def update_user(curr_name, new_name, new_email, new_addr, new_postal):
     if len(valid) == 1:
         # We check if the new information is of a valid format
         if (
-            postal_code_check(new_postal) and
+            (postal_code_check(new_postal) or len(new_postal) == 0) and
             email_check(new_email) and
             alphanumeric_check(new_name) and
             length_check(new_name, 3, 19)
         ):
 
-            # We then check if the new username and email are unique
+            # We then check if the new username and email are unique:
+            # If the user didn't update their existing names/passwords,
+            # the query will return 1, which is ok (it's their record),
+            # so ensure that the name and email have indeed been updated.
             if (
-                (len(User.query.filter_by(username=new_name).all()) > 0) or
-                (len(User.query.filter_by(email=new_email).all()) > 0)
+                ((len(User.query.filter_by(username=new_name).all()) > 0)
+                    and valid[0].username != new_name) or
+                ((len(User.query.filter_by(email=new_email).all()) > 0)
+                    and valid[0].email != new_email)
             ):
                 return False
             # If they're unique, update all the fields

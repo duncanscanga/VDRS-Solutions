@@ -1,0 +1,16 @@
+label {
+    padding-top: 20px;
+}
+
+/* Temporary until we change it in base.html */
+body {
+    height: 100%;
+    width: 100%;
+    background-color: #07070A;
+}
+
+.btn-wrapper {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+}
