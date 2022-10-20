@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% block content %}
+<link rel="stylesheet" href="../static/styles/create_listing.css" />
+
+<div class="container">
+  <h1>Create Listing Information</h1>
+  <h4>{{ msg }}</h4>
+  <form method="post">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input
+        class="form-control"
+        name="title"
+        id="title"
+        required
+      />
+      <label for="description">Description</label>
+      <input
+        class="form-control"
+        name="description"
+        id="description"
+        required
+      />
+      <label for="price">Price</label>
+      <input
+        class="form-control"
+        name="price"
+        id="price"
+      />
+
+      <div class="btn-wrapper">
+        <input
+          class="btn"
+          type="submit"
+          value="Create Listing"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,5 +1,6 @@
 from flask import render_template, request, session, redirect
-from app.models import login, User, register, update_user
+from app.models import create_listing, login, User, register, update_listing, \
+    update_user, find_listings, find_listing_by_id
 
 from app import app
 
@@ -78,12 +79,8 @@ def home(user):
     # the login checking code all the time for other
     # front-end portals
 
-    # some fake product data
-    products = [
-        {'name': 'prodcut 1', 'price': 10},
-        {'name': 'prodcut 2', 'price': 20}
-    ]
-    return render_template('index.html', user=user, products=products)
+    listings = find_listings(user.id)
+    return render_template('index.html', user=user, listings=listings)
 
 
 @app.route('/register', methods=['GET'])
@@ -156,3 +153,71 @@ def post_update_user(user):
             'update_user.html',
             user=user,
             msg="Update Failed!")
+
+
+# Route to send the listing update template
+@app.route('/update-listing/<int:listing_id>', methods=['GET'])
+def get_update_listing(listing_id):
+    listing = find_listing_by_id(listing_id)
+    # Return the template with the listing's current information
+    return render_template(
+        'update_listing.html',
+        listing=listing[0],
+        msg="Please modify the information you want to update below.")
+
+
+# Route to receive the updated listing information
+@app.route('/update-listing/<int:listing_id>', methods=['POST'])
+def post_update_listing(listing_id):
+    listing = find_listing_by_id(listing_id)
+    # First grab form data
+    new_title = request.form.get('title')
+    new_description = request.form.get('description')
+    new_price = request.form.get('price')
+
+    # Evaluate if the update was successful:
+    success = update_listing(listing[0].id, new_title, new_description,
+                             listing[0].price, float(new_price),
+                             listing[0].owner_id)
+    # If so, return to home page
+    # If not, stay on update_listing.html with error msg
+    if success:
+        return redirect('/')
+    else:
+        return render_template(
+            'update_listing.html',
+            listing=listing[0],
+            msg="Update Failed!")
+
+
+# Route to send the listing update template
+@app.route('/create-listing', methods=['GET'])
+@authenticate
+def get_create_listing(user):
+    # Return the template with the listing's current information
+    return render_template(
+        'create_listing.html',
+        user=user,
+        msg="Please modify the information you want to update below.")
+
+
+# Route to receive the updated listing information
+@app.route('/create-listing', methods=['POST'])
+@authenticate
+def post_create_listing(user):
+    # First grab form data
+    new_title = request.form.get('title')
+    new_description = request.form.get('description')
+    new_price = request.form.get('price')
+
+    # Evaluate if the update was successful:
+    success = create_listing(new_title, new_description, float(new_price),
+                             user.id)
+    # If so, return to home page
+    # If not, stay on create_listing.html with error msg
+    if success:
+        return redirect('/')
+    return render_template(
+            'create_listing.html',
+            user=user,
+            msg="Creation Failed!")

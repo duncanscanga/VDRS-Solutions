@@ -266,7 +266,7 @@ def create_listing(title, description, price, owner_id):
             and description_length_check(description, title) and
             range_check(price, 10, 10000) and
             date_check(date.today(), date(2021, 1, 2), date(2025, 1, 2))
-            and owner_check(owner_id) and unique_title_check(title)):
+            and owner_check(owner_id) and unique_title_check(title, 0)):
         # create a new listing
         listing = Listing(title=title, description=description, price=price,
                           last_modified_date=date.today(), owner_id=owner_id)
@@ -311,7 +311,7 @@ def length_check(str, min, max):
     return False
 
 
-def unique_title_check(title):
+def unique_title_check(title, listing_id):
     '''
     Check if the given title of a listing has already been used.
     Parameters:
@@ -321,6 +321,9 @@ def unique_title_check(title):
     '''
     # R4-8: A user cannot create products that have the same title.
     existed = Listing.query.filter_by(title=title).all()
+    # Checking if the title was unchanged
+    if len(existed) == 1 and existed[0].id == listing_id:
+        return True
     if len(existed) > 0:
         return False
     return True
@@ -470,30 +473,36 @@ def not_empty(word):
     return True
 
 
-def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
+def update_listing(listing_id, new_title, new_desc, curr_price, new_price,
+                   owner_id):
     '''
     R5-1, R5-2, R5-4: Can only update title, desc, and price
     Parameters:
+        listing_id  (int):      listing id
         new_title   (String):   updated title
         new_desc    (String):   updated description
         curr_price  (float):    original price
         new_price   (float):    updated price
-        owner_id    (int):      owner's id
+        owner_id    (int):      owner id
     Returns:
         True if the update is successful, False otherwise
     '''
 
-    # Check if the listing exists using the owner_id
-    listing = Listing.query.filter_by(id=owner_id).all()
+    # Check if the listing exists using the id or the owner_id
+    if listing_id != 0:
+        listing = Listing.query.filter_by(id=listing_id).all()
+    else:
+        listing = Listing.query.filter_by(owner_id=owner_id).all()
     if len(listing) > 0:
+
         # Check if the format of the new information is correct
         if (alphanumeric_check(new_title) and
                 length_check(new_title, 0, 80) and
                 length_check(new_desc, 20, 2000)
                 and description_length_check(new_desc, new_title) and
                 range_check(new_price, curr_price, 10000) and
-                unique_title_check(new_title)):
-
+                unique_title_check(new_title, listing_id) and
+                listing[0].owner_id == owner_id):
             # Update title, description and price
             listing[0].title = new_title
             listing[0].description = new_desc
@@ -522,7 +531,43 @@ def update_listing(new_title, new_desc, curr_price, new_price, owner_id):
 
 # Returns the listing when the owner id is passed in
 def find_listing(owner_id):
-    listing = Listing.query.filter_by(id=owner_id).all()
+    listing = Listing.query.filter_by(owner_id=owner_id).all()
     if len(listing) > 0:
         return listing[0]
     return False
+
+
+def find_listings(owner_id):
+    '''
+    Find listings of a certain owner
+    Parameters:
+        owner_id    (int):      owner id
+    Returns:
+        All listings with given owner id
+    '''
+    listings = Listing.query.filter_by(owner_id=owner_id).all()
+    return listings
+
+
+def find_listing_by_id(listing_id):
+    '''
+    Find listing of a certain id
+    Parameters:
+        listing_id    (int):      listing id
+    Returns:
+        The listing with given id
+    '''
+    listing = Listing.query.filter_by(id=listing_id).all()
+    return listing
+
+
+def find_listing_by_title(title):
+    '''
+    Find listing of a certain title
+    Parameters:
+        title    (string):      listing title
+    Returns:
+        The listing with given title
+    '''
+    listing = Listing.query.filter_by(title=title).all()
+    return listing

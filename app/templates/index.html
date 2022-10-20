@@ -1,22 +1,45 @@
 {% extends 'base.html' %}
+<link rel="stylesheet" href="../static/styles/index.css" />
 
 {% block header %}
 <h1>{% block title %}Profile{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-<h2 id="welcome-header">Welcome {{ user.name }} !</h2>
+<h2 id="welcome-header">Welcome {{ user.username }} !</h2>
 
 
-<h2>Here are all available products</h2>
+<h3>Listings:</h3>
 
-<div id="products">
-    {% for product in products %}
-    <div>
-        <h4>name: {{ product.name }} price: {{ product.price }} <a href=''>update</a></h4>
-    </div>
-    {% endfor %}
+<div id="listings">
+    <table>
+        <tr>
+          <th>Title</th>
+          <th>Price</th>
+        </tr>
+        {% for listing in listings %}
+        <tr>
+          <td>{{ listing.title }}</td>
+          <td>${{ listing.price }}</td>
+          <td><a href='/update-listing/{{listing.id}}'>Update</a></h4></td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td><a href='/create-listing'>Create New Listing</a></h4></td>
+          </tr>
+      </table>
 </div>
 
-<a href='/logout'>logout</a>
+
+<div class="btn-wrapper">
+    <input
+      class="btn"
+      type="submit"
+      value="Logout"
+      onclick="location.href = '/logout'"
+    />
+  </div>
+
 {% endblock %}
