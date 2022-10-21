@@ -35,6 +35,9 @@ def authenticate(inner_function):
             return redirect('/login')
 
     # return the wrapped version of the inner_function:
+    # Changed: ensure unique wrapper by using function name
+    # to avoid overwriting error.
+    wrapped_inner.__name__ = inner_function.__name__
     return wrapped_inner
 
 
@@ -93,6 +96,7 @@ def register_get():
 def register_post():
     email = request.form.get('email')
     name = request.form.get('name')
+    real_name = request.form.get('real_name')
     password = request.form.get('password')
     password2 = request.form.get('password2')
     error_message = None
@@ -101,7 +105,7 @@ def register_post():
         error_message = "The passwords do not match"
     else:
         # use backend api to register the user
-        success = register(name, email, password)
+        success = register(name, email, real_name, password)
         if not success:
             error_message = "Registration failed."
     # if there is any error messages when registering new user
