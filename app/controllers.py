@@ -95,6 +95,7 @@ def register_get():
 def register_post():
     email = request.form.get('email')
     name = request.form.get('name')
+    real_name = request.form.get('real_name')
     password = request.form.get('password')
     password2 = request.form.get('password2')
     error_message = None
@@ -103,8 +104,7 @@ def register_post():
         error_message = "The passwords do not match"
     else:
         # use backend api to register the user
-        # Added real_name field to satisfy register() method in models.py
-        success = register(name, email, "My Real Name", password)
+        success = register(name, email, real_name, password)
         if not success:
             error_message = "Registration failed."
     # if there is any error messages when registering new user
