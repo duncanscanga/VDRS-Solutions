@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% block content %}
+<link rel="stylesheet" href="../static/styles/update_listing.css" />
+
+<div class="container">
+  <h1>Update Listing Information</h1>
+  <h4>{{ msg }}</h4>
+  <form method="post">
+    <div class="form-group">
+      <label for="title">Update Title</label>
+      <input
+        class="form-control"
+        name="title"
+        id="title"
+        value="{{ listing.title }}"
+        required
+      />
+      <label for="description">Update Description</label>
+      <input
+        class="form-control"
+        name="description"
+        id="description"
+        value="{{ listing.description }}"
+        required
+      />
+      <label for="price">Update Price</label>
+      <input
+        class="form-control"
+        name="price"
+        id="price"
+        value="{{ listing.price }}"
+      />
+
+      <div class="btn-wrapper">
+        <input
+          class="btn"
+          type="submit"
+          value="Update Listing"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

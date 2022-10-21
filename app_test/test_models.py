@@ -1,7 +1,7 @@
 from app.models import alphanumeric_check, email_check, \
-    create_listing, not_empty, postal_code_check, \
-    unique_title_check, owner_check, length_check, pw_check, \
-    range_check, register, login, description_length_check, \
+    create_listing, find_listing_by_id, find_listing_by_title, not_empty, \
+    postal_code_check, unique_title_check, owner_check, length_check, \
+    pw_check, range_check, register, login, description_length_check, \
     date_check, update_user, update_listing, find_listing
 from datetime import date
 
@@ -229,9 +229,9 @@ def test_r4_8_unique_title():
     '''
     # Title is already used
     create_listing("Title", "This is a description.", 100, 1)
-    assert unique_title_check("Title") is False
+    assert unique_title_check("Title", 0) is False
     # Title is unique
-    assert unique_title_check("Unused Title") is True
+    assert unique_title_check("Unused Title", 0) is True
 
 
 def test_r3_2_3_postal_check():
@@ -276,11 +276,11 @@ def test_r3_1_update_user():
     assert update_user('original username', 'new_user', 'new@test.com',
                        'address', 'K7L') is False
 
-    # If the new username/email already exists, cannot update
+    # If the new username/email already exists from another user, cannot update
     assert update_user('original username',
-                       'original username', 'new@test.com',
+                       'original username', 'test0@test.com',
                        'address', 'K7L 3N6') is False
-    assert update_user('original username', 'new user', 'user@test.com',
+    assert update_user('original username', 'u90', 'user@test.com',
                        'address', 'K7L 3N6') is False
 
     # Valid update
@@ -321,22 +321,22 @@ def test_r5_1_update_listing():
     create_listing("Titleunique", "This is a description.", 150, 1) is True
 
     # Cannot update if the owner_id does not exist
-    assert update_listing("Newesttitle", "This is a short description.",
+    assert update_listing(0, "Newesttitle", "This is a short description.",
                           150, 153, 123) is False
 
     # Cannot update if the title format is not correct
-    assert update_listing("The title is longer than the description",
+    assert update_listing(0, "The title is longer than the description",
                           "This is a short description.", 150, 153, 1) is False
 
     # Cannot update if the description format is not correct
-    assert update_listing("title", "too short", 150, 153, 1) is False
+    assert update_listing(0, "title", "too short", 150, 153, 1) is False
 
     # Cannot update if the new price is lower than the original price
-    assert update_listing("Newesttitle",
+    assert update_listing(0, "Newesttitle",
                           "This is a short description.", 150, 20, 1) is False
 
     # Update is successful if all the requirements are passed
-    assert update_listing("Newest Title",
+    assert update_listing(0, "Newest Title",
                           "This is a short description. description",
                           150, 153, 1) is True
 
@@ -346,3 +346,16 @@ def test_r5_1_update_listing():
     assert listing.title == 'Newest Title'
     assert listing.description == 'This is a short description. description'
     assert listing.price == 153
+
+
+def test_find_listing_by_id():
+    '''
+    Testing Listing: Testiing the retrieval of listing using title or id
+    '''
+    create_listing("Some Title", "Some Description here", 100, 1)
+    assert find_listing_by_title("Some Title")[0].title == "Some Title"
+    assert find_listing_by_id(find_listing_by_title("Some Title")
+                              [0].id)[0].title == "Some Title"
+    assert find_listing_by_title("Some Title")[0].title != "Title"
+    assert find_listing_by_id(find_listing_by_title("Some Title")
+                              [0].id)[0].title != "Title"
