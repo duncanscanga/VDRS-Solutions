@@ -19,8 +19,8 @@
         </tr>
         {% for listing in listings %}
         <tr>
-          <td>{{ listing.title }}</td>
-          <td>${{ listing.price }}</td>
+          <td id="listingTitle">{{ listing.title }}</td>
+          <td id="listingPrice">${{ listing.price }}</td>
           <td><a href='/update-listing/{{listing.id}}'>Update</a></h4></td>
         </tr>
         {% endfor %}

@@ -494,7 +494,6 @@ def update_listing(listing_id, new_title, new_desc, curr_price, new_price,
     else:
         listing = Listing.query.filter_by(owner_id=owner_id).all()
     if len(listing) > 0:
-
         # Check if the format of the new information is correct
         if (alphanumeric_check(new_title) and
                 length_check(new_title, 0, 80) and
