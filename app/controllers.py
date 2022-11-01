@@ -44,7 +44,7 @@ def authenticate(inner_function):
 
 @app.route('/login', methods=['GET'])
 def login_get():
-    return render_template('login.html', 
+    return render_template('login.html',
                            message='Please login to your account')
 
 
@@ -68,7 +68,7 @@ def login_post():
         # code 303 is to force a 'GET' request
         return redirect('/', code=303)
     else:
-        return render_template('login.html', 
+        return render_template('login.html',
                                message='Incorrect email or password.')
 
 
