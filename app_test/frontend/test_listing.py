@@ -40,7 +40,7 @@ class FrontEndTest(BaseCase):
         self.assert_text("Creation Failed!", "#message")
 
         # Valid Title, Invalid description, Valid price
-        self.type("#title", "Test Title ")
+        self.type("#title", "Test Title")
         # R4-3 is not valid
         self.type("#description", "This")
         self.type("#price", "110.00")
