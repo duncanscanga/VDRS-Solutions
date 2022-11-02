@@ -387,9 +387,9 @@ def owner_check(owner_id):
     return False
 
 
-def update_user(curr_name, new_name, new_email, new_addr, new_postal):
+def update_user(curr_name, new_name, new_email, new_addr, new_postal, new_pw):
     '''
-    R3-1, R3-4: Allow user to update username, email,
+    R3-1, R3-4: Allow user to update username, password, email,
     billing addr, and postal code.
     Parameters:
         curr_name   (String):     current username
@@ -397,6 +397,7 @@ def update_user(curr_name, new_name, new_email, new_addr, new_postal):
         new_email   (String):     updated email
         new_addr    (String):     updated billing address
         new_postal  (String):     updated postal code
+        new_pw      (String):     updated password
     Returns:
         True if the transaction is successful, False otherwise
     '''
@@ -408,7 +409,8 @@ def update_user(curr_name, new_name, new_email, new_addr, new_postal):
             (postal_code_check(new_postal) or len(new_postal) == 0) and
             email_check(new_email) and
             alphanumeric_check(new_name) and
-            length_check(new_name, 3, 19)
+            length_check(new_name, 3, 19) and
+            pw_check(new_pw)
         ):
 
             # We then check if the new username and email are unique:
@@ -428,6 +430,7 @@ def update_user(curr_name, new_name, new_email, new_addr, new_postal):
                 valid[0].email = new_email
                 valid[0].billing_address = new_addr
                 valid[0].postal_code = new_postal
+                valid[0].password = new_pw
                 db.session.commit()
                 return True
         else:

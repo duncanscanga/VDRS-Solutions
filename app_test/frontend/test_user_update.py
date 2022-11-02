@@ -26,36 +26,44 @@ class FrontEndTest(BaseCase):
         FrontEndTest.test_update_helper(self)
         
         # All invalid inputs
-        self.open(base_url + "/update-user")
+        FrontEndTest.clear_keys(self)
         self.type("#email", "a")
         self.type("#name", "a")
         self.type("#password", "a")
         self.type("#postal-code", "a")
         self.click('input[type="submit"]')
+        self.assert_element("#message")
         self.assert_text("Update Failed!", "#message")
 
         # Just invalid email, no other updates
         self.open(base_url + "/update-user")
+        self.find_element("#email").clear()
         self.type("#email", "a")
         self.click('input[type="submit"]')
+        self.assert_element("#message")
         self.assert_text("Update Failed!", "#message")
 
         # Just invalid password, no other updates
         self.open(base_url + "/update-user")
+        self.find_element('#password').clear()
         self.type("#password", "a")
         self.click('input[type="submit"]')
+        self.assert_element("#message")
         self.assert_text("Update Failed!", "#message")
 
         # Just invalid username, no other updates
         self.open(base_url + "/update-user")
-        self.type("#username", "a")
+        self.find_element('#name').clear()
+        self.type("#name", "a")
         self.click('input[type="submit"]')
+        self.assert_element("#message")
         self.assert_text("Update Failed!", "#message")
 
         # Just invalid postal code, no other updates
         self.open(base_url + "/update-user")
         self.type("#postal-code", "a")
         self.click('input[type="submit"]')
+        self.assert_element("#message")
         self.assert_text("Update Failed!", "#message")
 
         # No updates, should pass
@@ -66,21 +74,24 @@ class FrontEndTest(BaseCase):
         self.assert_text("Welcome Test !", "#welcome-header")
 
         # Just valid email, no other updates
-        self.open(base_url + "/update-user")
-        self.type("#email", "newemail@gmail.com")
-        self.click('input[type="submit"]')
-        self.assert_element("#welcome-header")
-        self.assert_text("Welcome Test !", "#welcome-header")
+        # self.open(base_url + "/update-user")
+        # self.find_element("#email").clear()
+        # self.type("#email", "newemail@gmail.com")
+        # self.click('input[type="submit"]')
+        # self.assert_element("#welcome-header")
+        # self.assert_text("Welcome Test !", "#welcome-header")
 
         # Just valid username, no other updates
         self.open(base_url + "/update-user")
-        self.type("#username", "newusername")
+        self.find_element("#name").clear()
+        self.type("#name", "newusername")
         self.click('input[type="submit"]')
         self.assert_element("#welcome-header")
         self.assert_text("Welcome newusername !", "#welcome-header")
 
         # Just valid password, no other updates
         self.open(base_url + "/update-user")
+        self.find_element("#password").clear()
         self.type("#password", "Mynewpw123!")
         self.click('input[type="submit"]')
         self.assert_element("#welcome-header")
@@ -94,7 +105,7 @@ class FrontEndTest(BaseCase):
         self.assert_text("Welcome newusername !", "#welcome-header")
 
         # All valid updates
-        self.open(base_url, "/update-user")
+        FrontEndTest.clear_keys(self)
         self.type("#email", "validemail@gmail.com")
         self.type("#username", "validusername")
         self.type("#password", "Validpw123!")
@@ -104,6 +115,17 @@ class FrontEndTest(BaseCase):
         self.assert_element("#welcome-header")
         self.assert_text("Welcome validusername !", "#welcome-header")
 
+    def clear_keys(self, *_):
+        """
+        This helper method clears all fields
+        of update-user to ensure fresh test inputs
+        """
+        self.open(base_url + "/update-user")
+        self.find_element("#email").clear()
+        self.find_element("#password").clear()
+        self.find_element("#name").clear()
+        self.find_element("#postal-code").clear()
+        self.find_element("#billing-address").clear()
 
 
     def test_update_helper(self, *_):

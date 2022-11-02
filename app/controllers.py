@@ -143,12 +143,14 @@ def post_update_user(user):
     new_email = request.form.get('email')
     new_addr = request.form.get('billing-address')
     new_postal = request.form.get('postal-code')
+    new_pw = request.form.get('password')
 
     # Evaluate if the update was successful:
-    success = update_user(curr_name, new_name, new_email, new_addr, new_postal)
+    success = update_user(curr_name, new_name, new_email, new_addr, new_postal, new_pw)
     # If so, return to home page
     # If not, stay on update_user.html with error msg
     if success:
+        # session['logged_in'] = success.email
         return redirect('/')
     else:
         return render_template(
