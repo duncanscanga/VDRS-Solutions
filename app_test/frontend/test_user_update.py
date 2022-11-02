@@ -74,12 +74,15 @@ class FrontEndTest(BaseCase):
         self.assert_text("Welcome Test !", "#welcome-header")
 
         # Just valid email, no other updates
-        # self.open(base_url + "/update-user")
-        # self.find_element("#email").clear()
-        # self.type("#email", "newemail@gmail.com")
-        # self.click('input[type="submit"]')
-        # self.assert_element("#welcome-header")
-        # self.assert_text("Welcome Test !", "#welcome-header")
+        self.open(base_url + "/update-user")
+        self.find_element("#email").clear()
+        self.type("#email", "newemail@gmail.com")
+        self.click('input[type="submit"]')
+        # If we update the email, the user must log back in
+        self.assert_element("#message")
+        self.assert_text("Please login to your account", "#message")
+        # Delete existing record, re-register
+        FrontEndTest.test_update_helper(self)
 
         # Just valid username, no other updates
         self.open(base_url + "/update-user")
@@ -107,13 +110,14 @@ class FrontEndTest(BaseCase):
         # All valid updates
         FrontEndTest.clear_keys(self)
         self.type("#email", "validemail@gmail.com")
-        self.type("#username", "validusername")
+        self.type("#name", "validusername")
         self.type("#password", "Validpw123!")
         self.type("#postal-code", "")
         self.type("#billing-address", "")
         self.click('input[type="submit"]')
-        self.assert_element("#welcome-header")
-        self.assert_text("Welcome validusername !", "#welcome-header")
+        # Goes back to login page since we updated email too
+        self.assert_element("#message")
+        self.assert_text("Please login to your account", "#message")
 
     def clear_keys(self, *_):
         """
