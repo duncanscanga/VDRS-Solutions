@@ -139,6 +139,7 @@ def get_update_user(user):
 def post_update_user(user):
     # First grab form data
     curr_name = user.username
+    curr_email = user.email
     new_name = request.form.get('name')
     new_email = request.form.get('email')
     new_addr = request.form.get('billing-address')
@@ -150,7 +151,10 @@ def post_update_user(user):
     # If so, return to home page
     # If not, stay on update_user.html with error msg
     if success:
-        # session['logged_in'] = success.email
+        # We prompt the user to log back in to
+        # restore session with valid new email
+        if curr_email != new_email:
+            return redirect('/logout')
         return redirect('/')
     else:
         return render_template(
