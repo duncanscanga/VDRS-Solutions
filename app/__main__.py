@@ -15,7 +15,7 @@ for only these 2 lines.
 This file runs the server on port 8081
 """
 
-FLASK_PORT = 8081
+FLASK_PORT = 5000
 
 if __name__ == "__main__":
     app.run(debug=True, port=FLASK_PORT)
