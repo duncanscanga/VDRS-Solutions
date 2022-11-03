@@ -1,3 +1,4 @@
+instance/
 .DS_Store
 .env
 .flaskenv
