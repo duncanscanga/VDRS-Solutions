@@ -163,6 +163,7 @@ class FrontEndTest(BaseCase):
         partitioning tests.
         Possible Outputs: msg=Incorrect email or password, 
         redirect to home page
+        Requirements tested: R2-1
         """
 
         FrontEndTest.test_login_helper(self)
@@ -191,8 +192,6 @@ class FrontEndTest(BaseCase):
         """
 
         User.query.delete()
-        Listing.query.delete()
-        Booking.query.delete()
 
         # Clear Database for the test user
         User.query.filter(User.email == "test4@test.com").delete()
