@@ -17,7 +17,7 @@ Difficulties: Errors with certain tests with full-name field.
 Plan: Figure out how to fix some errors in Office Hour, and complete final blackbox test.
 
 # Vasuki:
-Dev Branch: vasuki-login-a4
+Dev Branch: vasuki-a4
 
 Progress: Wrote 3 test cases for the login page.
 

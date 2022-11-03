@@ -1,7 +1,6 @@
 from seleniumbase import BaseCase
 
 from app_test.conftest import base_url
-from unittest.mock import patch
 from app.models import User
 from app.models import db
 
@@ -24,7 +23,7 @@ class FrontEndTest(BaseCase):
         """
 
         FrontEndTest.test_update_helper(self)
-        
+
         # All invalid inputs
         FrontEndTest.clear_keys(self)
         self.type("#email", "a")
@@ -119,6 +118,87 @@ class FrontEndTest(BaseCase):
         self.assert_element("#message")
         self.assert_text("Please login to your account", "#message")
 
+    def test_update_output(self, *_):
+        """
+        This is a frontend output partitioning test
+        for updating user information.
+        Possible outputs:
+        - Valid update, redirect to home page
+        - Invalid update, error message appears and no redirect occurs
+        - Valid update, redirect to login page if email changed
+        """
+
+        FrontEndTest.test_update_helper(self)
+
+        # No changes, valid update, redirect to home page
+        self.open(base_url + "/update-user")
+        self.click('input[type="submit"]')
+        self.assert_element("#welcome-header")
+        self.assert_text("Welcome Test !", "#welcome-header")
+
+        # Invalid change, error message occurs and no redirect
+        self.open(base_url + "/update-user")
+        self.find_element("#email").clear()
+        self.type("#email", "a")
+        self.click('input[type="submit"]')
+        self.assert_element("#message")
+        self.assert_text("Update Failed!", "#message")
+
+        # Email changes, valid update, redirect to login page
+        self.open(base_url + "/update-user")
+        self.type("#email", "validemail@gmail.com")
+        self.type("#name", "validusername")
+        self.click('input[type="submit"]')
+        self.assert_element("#message")
+        self.assert_text("Please login to your account", "#message")
+
+    def test_update_boundaries(self, *_):
+        """
+        This is a frontend input boundary test
+        for updating user information.
+        Boundaries:
+        - R1-1 Email and password cannot be empty
+        - R1-4 Password length: min 6
+        - R1-5 Username cannot be empty
+        """
+
+        FrontEndTest.test_update_helper(self)
+
+        # Email cannot be empty
+        self.open(base_url + "/update-user")
+        self.find_element("#email").clear()
+        self.type("#email", "a")
+        self.click('input[type="submit"]')
+        self.assert_element("#email")  # Remain on update page
+
+        # Password cannot be empty
+        self.open(base_url + "/update-user")
+        self.find_element("#password").clear()
+        self.click('input[type="submit"]')
+        self.assert_element("#email")  # Remain on update page
+
+        # Password with less than 6 characters:
+        self.open(base_url + "/update-user")
+        self.find_element("#password").clear()
+        self.type("#password", "aA1!#")
+        self.click('input[type="submit"]')
+        self.assert_element("#message")
+        self.assert_text("Update Failed!", "#message")
+
+        # Password with exactly 6 characters:
+        self.open(base_url + "/update-user")
+        self.find_element("#password").clear()
+        self.type("#password", "aA1!#A")
+        self.click('input[type="submit"]')
+        self.assert_element("#welcome-header")
+        self.assert_text("Welcome Test !", "#welcome-header")
+
+        # Empty username
+        self.open(base_url + "/update-user")
+        self.find_element("#name").clear()
+        self.click('input[type="submit"]')
+        self.assert_element("#email")  # Remain on update page
+
     def clear_keys(self, *_):
         """
         This helper method clears all fields
@@ -130,7 +210,6 @@ class FrontEndTest(BaseCase):
         self.find_element("#name").clear()
         self.find_element("#postal-code").clear()
         self.find_element("#billing-address").clear()
-
 
     def test_update_helper(self, *_):
         """
@@ -162,4 +241,3 @@ class FrontEndTest(BaseCase):
         self.type("#password", "Test!123")
         # click enter button
         self.click('input[type="submit"]')
-        
