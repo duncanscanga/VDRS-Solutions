@@ -259,33 +259,33 @@ def test_r3_1_update_user():
 
     # If curr_name does not exist, cannot update
     assert update_user('invalid_username', 'updated_username', 'new@test.com',
-                       'address', 'K7L 3N6') is False
+                       'address', 'K7L 3N6', '12345Aa#') is False
 
     # If new name does not have proper format, cannot update
     assert update_user('original username', '  my new name   ', 'new@test.com',
-                       'address', 'K7L 3N6') is False
+                       'address', 'K7L 3N6', '12345Aa#') is False
     assert update_user('original_username',
                        'aaaaaaaaaaaaaaaaaaaaa', 'new@test.com',
-                       'address', 'K7L 3N6') is False
+                       'address', 'K7L 3N6', '12345Aa#') is False
 
     # If new email does not have proper format, cannot update
     assert update_user('original username', 'new_user', '',
-                       'address', 'K7L 3N6') is False
+                       'address', 'K7L 3N6', '12345Aa#') is False
 
     # If new postal code does not have proper format, cannot update
     assert update_user('original username', 'new_user', 'new@test.com',
-                       'address', 'K7L') is False
+                       'address', 'K7L', '12345Aa#') is False
 
     # If the new username/email already exists from another user, cannot update
     assert update_user('original username',
                        'original username', 'test0@test.com',
                        'address', 'K7L 3N6') is False
     assert update_user('original username', 'u90', 'user@test.com',
-                       'address', 'K7L 3N6') is False
+                       'address', 'K7L 3N6', '12345Aa#') is False
 
     # Valid update
     assert update_user('original username', 'new username',
-                       'new@test.com', 'address', 'K7L 3N5') is True
+                       'new@test.com', 'address', 'K7L 3N5', '12345Aa#') is True
 
     # Ensure all fields were updated properly
     user = login('new@test.com', '12345Aa#')
