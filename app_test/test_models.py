@@ -285,7 +285,8 @@ def test_r3_1_update_user():
 
     # Valid update
     assert update_user('original username', 'new username',
-                       'new@test.com', 'address', 'K7L 3N5', '12345Aa#') is True
+                       'new@test.com', 'address',
+                       'K7L 3N5', '12345Aa#') is True
 
     # Ensure all fields were updated properly
     user = login('new@test.com', '12345Aa#')
