@@ -101,7 +101,7 @@ def register_post():
     error_message = None
 
     if password != password2:
-        error_message = "The passwords do not match"
+        error_message = "The passwords do not match."
     else:
         # use backend api to register the user
         success = register(name, email, real_name, password)
