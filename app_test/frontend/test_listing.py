@@ -1,4 +1,3 @@
-'''
 from seleniumbase import BaseCase
 
 from app_test.conftest import base_url
@@ -440,4 +439,3 @@ class FrontEndTest(BaseCase):
         self.type("#password", "Test!123")
         # click enter button
         self.click('input[type="submit"]')
-'''
