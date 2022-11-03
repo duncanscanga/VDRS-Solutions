@@ -26,6 +26,8 @@ class FrontEndTest(BaseCase):
         self.type("#password", "12345Aa#")
         self.type("#password2", "12345Aa#")
         self.click('input[type="submit"]')
+        # stay on the register page
+        self.assert_element("#email")
 
         # valid email, valid full name, valid name,
         # empty password, valid confirm password
@@ -36,6 +38,8 @@ class FrontEndTest(BaseCase):
         self.type("#name", "u10")
         self.type("#password2", "12345Aa#")
         self.click('input[type="submit"]')
+        # stay on the register page
+        self.assert_element("#password")
 
         # invalid email, valid full name, valid name,
         # valid password, valid confirm password
@@ -74,6 +78,9 @@ class FrontEndTest(BaseCase):
         self.type("#password", "12345Aa#")
         self.type("#password2", "12345Aa#")
         self.click('input[type="submit"]')
+        # takes the user to the login page
+        self.assert_element("#message")
+        self.assert_text("Please login to your account", "#message")
 
     def test_register_boundary_success(self, *_):
         """
@@ -82,10 +89,10 @@ class FrontEndTest(BaseCase):
         Password has to be longer than 5 characters.
         The password also has to have one uppercase, lowercase
         and special character.
-        Inputs:5,6
+        Inputs of strings with length: 5,6
 
         Username has to be longer than 2 but less than 20 characters.
-        Inputs: 2,3,19,20
+         Inputs of strings with length: 2,3,19,20
 
         Requirements tested: R1-4,R1-6
         """
@@ -113,6 +120,9 @@ class FrontEndTest(BaseCase):
         self.type("#password", "123Aa#")
         self.type("#password2", "123Aa#")
         self.click('input[type="submit"]')
+        # takes the user to the login page
+        self.assert_element("#message")
+        self.assert_text("Please login to your account", "#message")
 
         # invalid name length less than 3
         self.open(base_url + "/register")
@@ -135,6 +145,9 @@ class FrontEndTest(BaseCase):
         self.type("#password", "12345Aa#")
         self.type("#password2", "12345Aa#")
         self.click('input[type="submit"]')
+        # takes the user to the login page
+        self.assert_element("#message")
+        self.assert_text("Please login to your account", "#message")
 
         # valid name length 19
         self.open(base_url + "/register")
@@ -144,6 +157,9 @@ class FrontEndTest(BaseCase):
         self.type("#password", "12345Aa#")
         self.type("#password2", "12345Aa#")
         self.click('input[type="submit"]')
+        # takes the user to the login page
+        self.assert_element("#message")
+        self.assert_text("Please login to your account", "#message")
 
         # valid name length 20
         self.open(base_url + "/register")
@@ -153,6 +169,9 @@ class FrontEndTest(BaseCase):
         self.type("#password", "12345Aa#")
         self.type("#password2", "12345Aa#")
         self.click('input[type="submit"]')
+        # takes the user to the login page
+        self.assert_element("#message")
+        self.assert_text("Please login to your account", "#message")
 
     def test_register_output_success(self, *_):
         """
@@ -186,6 +205,9 @@ class FrontEndTest(BaseCase):
         self.type("#password", "123Aa#")
         self.type("#password2", "123Aa#")
         self.click('input[type="submit"]')
+        # takes the user to the login page
+        self.assert_element("#message")
+        self.assert_text("Please login to your account", "#message")
 
         # invalid email (repeated), valid full name, valid name
         # valid password, valid confirm password
