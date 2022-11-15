@@ -6,3 +6,4 @@ validate_email
 datetime
 selenium
 seleniumbase
+pymysql
