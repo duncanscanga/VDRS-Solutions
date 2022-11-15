@@ -1,7 +1,7 @@
 from seleniumbase import BaseCase
 
 from app_test.conftest import base_url
-from app.models import Booking, Listing, User
+from app.models import User
 from app.models import db
 
 """
@@ -161,7 +161,7 @@ class FrontEndTest(BaseCase):
         """
         This is a front end unit test to the login page using output
         partitioning tests.
-        Possible Outputs: msg=Incorrect email or password, 
+        Possible Outputs: msg=Incorrect email or password,
         redirect to home page
         Requirements tested: R2-1
         """
@@ -184,7 +184,7 @@ class FrontEndTest(BaseCase):
         self.click('input[type="submit"]')
         # Needs to take the user to the home page
         self.assert_element("#welcome-header")
-    
+
     def test_login_helper(self, *_):
         """
         This is a helper function to set up the database for the tests.
