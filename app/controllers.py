@@ -219,8 +219,8 @@ def post_create_listing(user):
     new_price = request.form.get('price')
 
     # Evaluate if the update was successful:
-    success = create_listing(new_title, new_description, float(new_price),
-                             user.id)
+    success = create_listing(new_title, new_description, str(new_price),
+                             str(user.id))
     # If so, return to home page
     # If not, stay on create_listing.html with error msg
     if success:

@@ -4,7 +4,7 @@ from app.models import alphanumeric_check, email_check, \
     pw_check, range_check, register, login, description_length_check, \
     date_check, update_user, update_listing, find_listing
 from datetime import date
-
+from app_test.injection_tests import test_sqli_create_listing
 
 def test_r1_7_user_register():
 
@@ -360,3 +360,11 @@ def test_find_listing_by_id():
     assert find_listing_by_title("Some Title")[0].title != "Title"
     assert find_listing_by_id(find_listing_by_title("Some Title")
                               [0].id)[0].title != "Title"
+
+def test_sqli_listing():
+    '''
+    Testing Create Listing: Testing the Create Listing function against SQL 
+    Injection.
+    '''
+    print("here")
+    test_sqli_create_listing()
