@@ -5,7 +5,7 @@ from app.models import alphanumeric_check, email_check, \
     date_check, update_user, update_listing, find_listing
 from datetime import date
 from app_test.injection_tests import test_sqli_create_listing, \
-                                    test_sqli_register
+    test_sqli_register
 
 
 def test_r1_7_user_register():
