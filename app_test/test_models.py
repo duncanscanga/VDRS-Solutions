@@ -6,6 +6,7 @@ from app.models import alphanumeric_check, email_check, \
 from datetime import date
 from app_test.injection_tests import test_sqli_create_listing
 
+
 def test_r1_7_user_register():
 
     # R1-1: Email cannot be empty. password cannot be empty.
@@ -361,10 +362,10 @@ def test_find_listing_by_id():
     assert find_listing_by_id(find_listing_by_title("Some Title")
                               [0].id)[0].title != "Title"
 
+
 def test_sqli_listing():
     '''
-    Testing Create Listing: Testing the Create Listing function against SQL 
+    Testing Create Listing: Testing the Create Listing function against SQL
     Injection.
     '''
-    print("here")
     test_sqli_create_listing()
