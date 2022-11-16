@@ -15,13 +15,6 @@ def test_sqli_create_listing():
     test_file = open('app_test/Generic_SQLI.txt', 'r')
     lines = test_file.readlines()
 
-    # This is the test values we will be testing. When all values are met,
-    # the listing is created. The payloads should all be False as no listing
-    # should be created.
-    Listing.query.filter(Listing.title == "Test Title Unique").delete()
-    assert create_listing("Test Title Unique", "This is a description.",
-                          150, 1) is True
-
     for line in lines:
         test_price_parameter(line)
         test_owner_id_parameter(line)
