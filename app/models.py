@@ -260,6 +260,30 @@ def create_listing(title, description, price, owner_id):
       Returns:
         True if the listing can be created, otherwise False
     '''
+
+    # length should not exceed 8
+    # (max price is 10000, add two digits for decimal)
+    if (len(str(price)) > 8):
+        return False
+    # convert the price to a float
+    try:
+        price = float(price)
+    except ValueError:
+        return False
+
+    # length should not exceed 5
+    # (currently, we will not have more than 10000 users)
+    if (len(str(owner_id)) > 5):
+        return False
+    # convert the owner_id to an int
+    try:
+        owner_id = int(owner_id)
+    except ValueError:
+        return False
+    # Owner Id should be from 0 to 10000 (max users currently)
+    if (owner_id < 0 or owner_id > 10000):
+        return False
+
     # check the requirements
     if (alphanumeric_check(title) and
             length_check(title, 0, 80) and length_check(description, 20, 2000)
