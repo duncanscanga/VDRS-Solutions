@@ -14,7 +14,13 @@ def test_sqli_create_listing():
     '''
     test_file = open('app_test/Generic_SQLI.txt', 'r')
     lines = test_file.readlines()
-    print(lines)
+
+    # This is the test values we will be testing. When all values are met,
+    # the listing is created. The payloads should all be False as no listing
+    # shdoul be created.
+    Listing.query.filter(Listing.title == "Test Title").delete()
+    assert create_listing("Test Title", "This is a description.",
+                          150, 1) is True
 
     for line in lines:
         test_price_parameter(line)
