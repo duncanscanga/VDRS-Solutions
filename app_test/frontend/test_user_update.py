@@ -1,5 +1,4 @@
 from seleniumbase import BaseCase
-
 from app_test.conftest import base_url
 from app.models import User
 from app.models import db
