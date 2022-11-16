@@ -161,6 +161,10 @@ def register(name, email, real_name, password):
     if not pw_check(password):
         return False
 
+    # Ensure the name is only alphabetic characters or spaces, and doesn't exceed the maximum length
+    if not real_name_check(real_name):
+        return False
+
     # Check that has to be non-empty, alphanumeric-only,
     # and space allowed only if it is not as the prefix or suffix
     if not alphanumeric_check(name):
@@ -238,8 +242,26 @@ def pw_check(password):
         elif not c.isalnum():
             has_special = True
 
+    # Since many SQL Injections are valid password inputs, ensure
+    # the input is not a generic SQL Injection string:
+    f = open("app_test/Generic_SQLI.txt", "r")
+    lines = f.readlines()
+    if password in lines:
+        return False
+
     # Only return true if all the flags got set to True at least once
     return has_upper and has_lower and has_special
+
+
+# Ensures the real name is less than 80 chars, and is either alpha or spaces
+def real_name_check(name):
+    # We don't need a real name, but if we have one, do the checks
+    if name == None:
+        return True
+
+    if len(name) > 80 or "\n" in name:
+        return False
+    return all(c.isalpha() or c.isspace() for c in name)
 
 
 # Uses the validate_email library to ensure the email is valid.

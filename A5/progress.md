@@ -10,10 +10,17 @@ Plan: Going to improve requirement checking that takes place in the actual creat
 
 # Rahul:
 
-Dev Branch:
-Progress:
-Difficulties:
-Plan:
+Dev Branch: 69-SQL-Injection-Register
+
+Progress: All the tests pass for the SQL injection using the name
+and email as parameters
+
+Difficulties: Syntax errors and figuring out how to use the 
+line parameter to replace the name and email.
+Also had difficulty installing docker.
+
+Plan: Go to the office hours to figure out how to use
+the parameters and the SQL injection text file correctly.
 
 # Vasuki:
 
@@ -24,7 +31,7 @@ Plan:
 
 # Sam:
 
-Dev Branch:
-Progress:
-Difficulties:
-Plan:
+Dev Branch: sam-register-injection, sam-a5
+Progress: Implemented Docker, started working on the Register() injection testing
+Difficulties: Trouble with implementing checks for some injections since many of them are valid passwords
+Plan: Find the most efficient check to ensure the inputs are not passed in
