@@ -4,7 +4,8 @@ from app.models import alphanumeric_check, email_check, \
     pw_check, range_check, register, login, description_length_check, \
     date_check, update_user, update_listing, find_listing
 from datetime import date
-from app_test.injection_tests import test_sqli_create_listing, test_sqli_register
+from app_test.injection_tests import test_sqli_create_listing, \
+                                    test_sqli_register
 
 
 def test_r1_7_user_register():
@@ -15,33 +16,44 @@ def test_r1_7_user_register():
     assert register('u20', '', 'real username', '12345Aa#') is False
 
     # R1-3:The email has to follow addr-spec defined in RFC 5322
-    assert register('u30', 'Invalid email', 'real username', '12345Aa#') is False
+    assert register('u30', 'Invalid email',
+                    'real username', '12345Aa#') is False
 
     # R1-4: Password has to meet the required complexity: minimum length 6,
     # at least one upper case, at least one lower case and at least one
     # special character.
     assert register('u40', 'test2@test.com', 'real username', '12') is False
-    assert register('u50', 'test3@test.com', 'real username', '123456') is False
-    assert register('u60', 'test4@test.com', 'real username', '123456A') is False
-    assert register('u70', 'test5@test.com', 'real username', '123456a') is False
-    assert register('u80', 'test6@test.com', 'real username', '123456a') is False
+    assert register('u50', 'test3@test.com',
+                    'real username', '123456') is False
+    assert register('u60', 'test4@test.com',
+                    'real username', '123456A') is False
+    assert register('u70', 'test5@test.com',
+                    'real username', '123456a') is False
+    assert register('u80', 'test6@test.com',
+                    'real username', '123456a') is False
 
     # Valid register
-    assert register('u90', 'test0@test.com', 'real username', '12345Aa#') is True
+    assert register('u90', 'test0@test.com',
+                    'real username', '12345Aa#') is True
 
     # R1-5: User name has to be non-empty, alphanumeric-only, and space allowed
     # only if it is not as the prefix or suffix.
-    assert register(' u', 'test8@test.com', 'real username', '123456a') is False
-    assert register('u ', 'test9@test.com', 'real username', '123456a') is False
+    assert register(' u', 'test8@test.com',
+                    'real username', '123456a') is False
+    assert register('u ', 'test9@test.com',
+                    'real username', '123456a') is False
 
     # R1-6: User name has to be longer than 2 characters and less than
     # 20 characters.
-    assert register('u', 'test7@test.com', 'real username', '123456Aa#') is False
-    assert register('u100u100u100u100u100u100u100', 'test6@test.com', 'real username',
+    assert register('u', 'test7@test.com',
+                    'real username', '123456Aa#') is False
+    assert register('u100u100u100u100u100u100u100',
+                    'test6@test.com', 'real username',
                     '123456a') is False
 
     # R1-7: If the email has been used, the operation failed.
-    assert register('u100', 'test0@test.com', 'real username', '12345Aa#') is False
+    assert register('u100', 'test0@test.com',
+                    'real username', '12345Aa#') is False
 
     # R1-8: Shipping address is empty at the time of registration.
     user = login('test0@test.com', '12345Aa#')

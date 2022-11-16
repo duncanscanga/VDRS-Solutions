@@ -52,7 +52,7 @@ def real_name_register(line):
     '''
     Function to test SQL Injection handling for Register method
     for the 'real_name' parameter.
-    ''' 
+    '''
     User.query.filter(User.email == "test0@test.com").delete()
     assert register('u90', 'test0@test.com', line, '12345Aa#') is False
 

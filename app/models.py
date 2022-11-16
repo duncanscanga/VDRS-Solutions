@@ -161,7 +161,8 @@ def register(name, email, real_name, password):
     if not pw_check(password):
         return False
 
-    # Ensure the name is only alphabetic characters or spaces, and doesn't exceed the maximum length
+    # Ensure the name is only alphabetic characters or spaces,
+    # and doesn't exceed the maximum length
     if not real_name_check(real_name):
         return False
 
@@ -256,7 +257,7 @@ def pw_check(password):
 # Ensures the real name is less than 80 chars, and is either alpha or spaces
 def real_name_check(name):
     # We don't need a real name, but if we have one, do the checks
-    if name == None:
+    if name is None:
         return True
 
     if len(name) > 80 or "\n" in name:
