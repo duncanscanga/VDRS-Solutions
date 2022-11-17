@@ -1,5 +1,4 @@
 from seleniumbase import BaseCase
-
 from app_test.conftest import base_url
 from app.models import User
 from app.models import db
@@ -201,7 +200,7 @@ class FrontEndTest(BaseCase):
         self.open(base_url + "/register")
         # fill details
         self.type("#email", "test4@test.com")
-        self.type("#real_name", "User Test")
+        self.type("#real_name", "User4 Test")
         self.type("#name", "User4")
         self.type("#password", "User!123")
         self.type("#password2", "User!123")
