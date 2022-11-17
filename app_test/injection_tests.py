@@ -10,7 +10,6 @@ def test_sqli_register():
     '''
     injection_file = open('app_test/Generic_SQLI.txt', 'r')
     lines = injection_file.readlines()
-    test_file = open('app_test/Generic_SQLI.txt', 'r')
 
     for line in lines:
         test_name_parameter(line)
