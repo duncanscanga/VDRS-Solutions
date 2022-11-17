@@ -1,9 +1,0 @@
-Last_Page: http://127.0.0.1:8081/login
-Browser: chrome 
-Traceback: File "C:\Users\Rahul\AppData\Local\Programs\Python\Python39\lib\unittest\case.py", line 593, in run
-    self._callTestMethod(testMethod)
-  File "C:\Users\Rahul\AppData\Local\Programs\Python\Python39\lib\unittest\case.py", line 550, in _callTestMethod
-    method()
-  File "C:\Users\Rahul\OneDrive\Documents\GitHub\VDRS-Solutions\app_test\frontend\test_listing.py", line 27, in test_create_listing_input_success
-    ownerId = user[0].id
-Exception: list index out of range
