@@ -6,14 +6,33 @@ File to test SQL Injection handling for Register and Create Listing methods
 
 def test_sqli_register():
     '''
-    Function to test SQL Injection handling for Register method
+    Function to test SQL Injection handling for registration
     '''
     injection_file = open('app_test/Generic_SQLI.txt', 'r')
     lines = injection_file.readlines()
 
     for line in lines:
+        test_name_parameter(line)
+        test_email_parameter(line)
         real_name_register(line)
         password_register(line)
+
+
+def test_name_parameter(line):
+    '''
+    Function to test SQL Injection handling for registration
+    parameter 'name'.
+    '''
+    assert register(line, 'realname@gmail.com',
+                    'real name', '12345Aa#') is False
+
+
+def test_email_parameter(line):
+    '''
+    Function to test SQL Injection handling for registration
+    parameter 'name'.
+    '''
+    assert register('user50', line, 'real name', '12345Aa#') is False
 
 
 def test_sqli_create_listing():

@@ -23,6 +23,8 @@ docs/_build/
 .vscode
 db.sqlite
 **/__pycache__/
+**/latest_logs
+**/archived_logs
 
 # Coverage reports
 htmlcov/
