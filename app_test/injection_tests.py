@@ -24,7 +24,7 @@ def test_name_parameter(line):
     parameter 'name'.
     '''
     assert register(line, 'realname@gmail.com',
-                    'real_name', '12345Aa#') is False
+                    'real name', '12345Aa#') is False
 
 
 def test_email_parameter(line):
@@ -32,7 +32,7 @@ def test_email_parameter(line):
     Function to test SQL Injection handling for registration
     parameter 'name'.
     '''
-    assert register('user50', line, 'real_name', '12345Aa#') is False
+    assert register('user50', line, 'real name', '12345Aa#') is False
 
 
 def test_sqli_create_listing():
