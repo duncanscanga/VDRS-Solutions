@@ -1,5 +1,4 @@
-from app.models import create_listing, Listing
-from app.models import register
+from app.models import create_listing, Listing, User, register
 '''
 File to test SQL Injection handling for Register and Create Listing methods
 '''
@@ -9,12 +8,16 @@ def test_sqli_register():
     '''
     Function to test SQL Injection handling for registration
     '''
+    injection_file = open('app_test/Generic_SQLI.txt', 'r')
+    lines = injection_file.readlines()
     test_file = open('app_test/Generic_SQLI.txt', 'r')
     lines = test_file.readlines()
 
     for line in lines:
         test_name_parameter(line)
         test_email_parameter(line)
+        real_name_register(line)
+        password_register(line)
 
 
 def test_name_parameter(line):
