@@ -307,6 +307,9 @@ def create_listing(title, description, price, owner_id):
     if (owner_id < 0 or owner_id > 10000):
         return False
 
+    if not (desc_character_check(description)):
+        return False
+
     # check the requirements
     if (alphanumeric_check(title) and
             length_check(title, 0, 80) and length_check(description, 20, 2000)
@@ -323,6 +326,15 @@ def create_listing(title, description, price, owner_id):
         db.session.commit()
         return True
     return False
+
+
+def desc_character_check(description):
+    for element in range(0, len(description)):
+        if not (description[element].isalnum() or description[element] == " " 
+                or description[element] == "." or description[element] == ","
+                or description[element] == "!"):
+            return False
+    return True
 
 
 def alphanumeric_check(title):

@@ -45,6 +45,8 @@ def test_sqli_create_listing():
     for line in lines:
         test_price_parameter(line)
         test_owner_id_parameter(line)
+        test_listing_title_parameter(line)
+        test_listing_description_parameter(line)
 
 
 def test_price_parameter(line):
@@ -65,6 +67,27 @@ def test_owner_id_parameter(line):
     Listing.query.filter(Listing.title == "Test Title").delete()
     assert create_listing("Test Title", "This is a description.",
                           150, line) is False
+
+
+def test_listing_title_parameter(line):
+    '''
+    Function to test SQL Injection handling for Create Listing method
+    parameter 'title'.
+    '''
+
+    Listing.query.filter(Listing.title == "Test Title").delete()
+    assert create_listing(line, "This is a description.",
+                          150, 1) is False
+
+
+def test_listing_description_parameter(line):
+    '''
+    Function to test SQL Injection handling for Create Listing method
+    parameter 'description'.
+    '''
+
+    Listing.query.filter(Listing.title == "Test Title").delete()
+    assert create_listing("Test Title", line, 150, 1) is False
 
 
 def real_name_register(line):
