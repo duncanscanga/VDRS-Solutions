@@ -24,10 +24,13 @@ the parameters and the SQL injection text file correctly.
 
 # Vasuki:
 
-Dev Branch:
-Progress:
-Difficulties:
-Plan:
+Dev Branch: vasuki-a5
+
+Progress: Created tests to ensure injection inputs are rejected. 
+
+Difficulties: Figuring out how to block the malicious listing description inputs. 
+
+Plan: Get feedback from the teammates on the PR. Make changes as necessary. 
 
 # Sam:
 

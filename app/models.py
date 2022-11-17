@@ -329,6 +329,16 @@ def create_listing(title, description, price, owner_id):
 
 
 def desc_character_check(description):
+    '''
+    Check if the given description satisfies:
+    R4-9: The description of the product has to be alphanumeric, and
+    the only other characters allowed are commas, periods, exclamation
+    marks, and spaces.
+    Parameters:
+        description (string):       description of the listing
+    Returns:
+        True if the requirements are meant, otherwise False
+    '''
     for element in range(0, len(description)):
         if not (description[element].isalnum() or description[element] == " " 
                 or description[element] == "." or description[element] == ","
