@@ -226,7 +226,7 @@ class FrontEndTest(BaseCase):
         self.open(base_url + "/register")
         # fill details
         self.type("#email", "test2@test.com")
-        self.type("#real_name", "Test Test")
+        self.type("#real_name", "real username")
         self.type("#name", "Test")
         self.type("#password", "Test!123")
         self.type("#password2", "Test!123")

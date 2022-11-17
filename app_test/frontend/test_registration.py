@@ -34,7 +34,7 @@ class FrontEndTest(BaseCase):
         # R1-1 not valid
         self.open(base_url + "/register")
         self.type("#email", "valid@gmail.com")
-        self.type("#real_name", "real_u10")
+        self.type("#real_name", "real username")
         self.type("#name", "u10")
         self.type("#password2", "12345Aa#")
         self.click('input[type="submit"]')
@@ -46,7 +46,7 @@ class FrontEndTest(BaseCase):
         self.open(base_url + "/register")
         # R1-3 not valid
         self.type("#email", "Invalid email")
-        self.type("#real_name", "real_u10")
+        self.type("#real_name", "real username")
         self.type("#name", "u10")
         self.type("#password", "12345Aa#")
         self.type("#password2", "12345Aa#")
@@ -59,7 +59,7 @@ class FrontEndTest(BaseCase):
         # valid password, valid confirm password
         self.open(base_url + "/register")
         self.type("#email", "valid@gmail.com")
-        self.type("#real_name", "real_u10")
+        self.type("#real_name", "real username")
         # R1-5 not valid
         self.type("#name", " u10")
         self.type("#password", "12345Aa#")
@@ -73,7 +73,7 @@ class FrontEndTest(BaseCase):
         # valid password, valid confirm password
         self.open(base_url + "/register")
         self.type("#email", "valid@gmail.com")
-        self.type("#real_name", "real_person")
+        self.type("#real_name", "real username")
         self.type("#name", "real")
         self.type("#password", "12345Aa#")
         self.type("#password2", "12345Aa#")
@@ -101,7 +101,7 @@ class FrontEndTest(BaseCase):
         # invalid password, valid confirm password
         self.open(base_url + "/register")
         self.type("#email", "valid2@gmail.com")
-        self.type("#real_name", "real_u10")
+        self.type("#real_name", "real username")
         self.type("#name", "u10")
         # R1-4 not valid
         self.type("#password", "12Aa#")
@@ -115,7 +115,7 @@ class FrontEndTest(BaseCase):
         # valid password, valid confirm password
         self.open(base_url + "/register")
         self.type("#email", "valid2@gmail.com")
-        self.type("#real_name", "real_u10")
+        self.type("#real_name", "real username")
         self.type("#name", "u10")
         self.type("#password", "123Aa#")
         self.type("#password2", "123Aa#")
@@ -127,7 +127,7 @@ class FrontEndTest(BaseCase):
         # invalid name length less than 3
         self.open(base_url + "/register")
         self.type("#email", "valid3@gmail.com")
-        self.type("#real_name", "real_u10")
+        self.type("#real_name", "real username")
         # R1-6 not valid
         self.type("#name", "u1")
         self.type("#password", "12345Aa#")
@@ -140,7 +140,7 @@ class FrontEndTest(BaseCase):
         # valid name length 3
         self.open(base_url + "/register")
         self.type("#email", "valid3@gmail.com")
-        self.type("#real_name", "real_u10")
+        self.type("#real_name", "real username")
         self.type("#name", "u10")
         self.type("#password", "12345Aa#")
         self.type("#password2", "12345Aa#")
@@ -152,7 +152,7 @@ class FrontEndTest(BaseCase):
         # valid name length 19
         self.open(base_url + "/register")
         self.type("#email", "valid4@gmail.com")
-        self.type("#real_name", "real_u10")
+        self.type("#real_name", "real username")
         self.type("#name", "u101111111111111111")
         self.type("#password", "12345Aa#")
         self.type("#password2", "12345Aa#")
@@ -164,7 +164,7 @@ class FrontEndTest(BaseCase):
         # valid name length 20
         self.open(base_url + "/register")
         self.type("#email", "valid5@gmail.com")
-        self.type("#real_name", "real_u10")
+        self.type("#real_name", "real username")
         self.type("#name", "u1011111111111111111")
         self.type("#password", "12345Aa#")
         self.type("#password2", "12345Aa#")
@@ -186,7 +186,7 @@ class FrontEndTest(BaseCase):
         # valid password, invalid confirm password
         self.open(base_url + "/register")
         self.type("#email", "valid6@gmail.com")
-        self.type("#real_name", "real_u10")
+        self.type("#real_name", "real username")
         self.type("#name", "u10")
         self.type("#password", "123Aa#")
         # passwords do not match
@@ -200,7 +200,7 @@ class FrontEndTest(BaseCase):
         # valid password, valid confirm password
         self.open(base_url + "/register")
         self.type("#email", "valid6@gmail.com")
-        self.type("#real_name", "real_u10")
+        self.type("#real_name", "real username")
         self.type("#name", "u10")
         self.type("#password", "123Aa#")
         self.type("#password2", "123Aa#")
@@ -214,7 +214,7 @@ class FrontEndTest(BaseCase):
         self.open(base_url + "/register")
         # violates R1-7
         self.type("#email", "valid6@gmail.com")
-        self.type("#real_name", "real_u10")
+        self.type("#real_name", "real username")
         self.type("#name", "u10")
         self.type("#password", "123Aa#")
         self.type("#password2", "123Aa#")
