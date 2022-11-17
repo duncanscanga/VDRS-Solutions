@@ -11,7 +11,6 @@ def test_sqli_register():
     '''
     test_file = open('app_test/Generic_SQLI.txt', 'r')
     lines = test_file.readlines()
-    print(lines)
 
     for line in lines:
         test_name_parameter(line)

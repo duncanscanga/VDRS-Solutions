@@ -142,6 +142,10 @@ def register(name, email, real_name, password):
       Returns:
         True if registration succeeded otherwise False
     '''
+    # Check that the email has to follow addr-spec defined in RFC 5322
+    if not email_check(email):
+        return False
+
     # check if the email has been used:
     existed = User.query.filter_by(email=email).all()
     if len(existed) > 0:
@@ -149,10 +153,6 @@ def register(name, email, real_name, password):
 
     # check if the email and password are not empty:
     if not not_empty(email) and not not_empty(password):
-        return False
-
-    # Check that the email has to follow addr-spec defined in RFC 5322
-    if not email_check(email):
         return False
 
     # Check that the password has to meet the required complexity:
