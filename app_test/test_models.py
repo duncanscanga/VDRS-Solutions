@@ -2,7 +2,7 @@ from app.models import alphanumeric_check, email_check, \
     create_listing, find_listing_by_id, find_listing_by_title, not_empty, \
     postal_code_check, unique_title_check, owner_check, length_check, \
     pw_check, range_check, register, login, description_length_check, \
-    date_check, update_user, update_listing, find_listing
+    date_check, update_user, update_listing, find_listing, desc_character_check
 from datetime import date
 from app_test.injection_tests import test_sqli_create_listing, \
     test_sqli_register
@@ -245,6 +245,23 @@ def test_r4_8_unique_title():
     assert unique_title_check("Title", 0) is False
     # Title is unique
     assert unique_title_check("Unused Title", 0) is True
+
+
+def test_r4_9_desc_characters():
+    '''
+    R4-9: The description of the product has to be alphanumeric, and
+    the only other characters allowed are commas, periods, exclamation
+    marks, and spaces.
+    '''
+
+    assert desc_character_check("This is a valid description") is True
+    assert desc_character_check("This is a valid description!!") is True
+    assert desc_character_check("This description, description") is True
+    assert desc_character_check("This is a valid description.") is True
+    assert desc_character_check("This is a valid description101") is True
+    assert desc_character_check(">This is not a valid description<") is False
+    assert desc_character_check("**This is not a valid description&&") is False
+    assert desc_character_check("This is a valid description _") is False
 
 
 def test_r3_2_3_postal_check():
