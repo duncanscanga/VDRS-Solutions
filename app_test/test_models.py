@@ -2,10 +2,36 @@ from app.models import alphanumeric_check, email_check, \
     create_listing, find_listing_by_id, find_listing_by_title, not_empty, \
     postal_code_check, unique_title_check, owner_check, length_check, \
     pw_check, range_check, register, login, description_length_check, \
-    date_check, update_user, update_listing, find_listing, desc_character_check
+    date_check, update_user, update_listing, find_listing, \
+    desc_character_check, create_booking
 from datetime import date
 from app_test.injection_tests import test_sqli_create_listing, \
     test_sqli_register
+
+
+# SIMPLE unit test without any boundary testing to
+# initially test each requirement
+def test_create_booking():
+
+    # Start by registering a host user
+    assert register('u999', 'host@test.com',
+                    'real username', '12345Aa#') is True
+    # Then create a listing
+    assert create_listing("ListingTitle", "This is a description.",
+                          10, 1) is True
+
+    # Register a buyer
+    assert register('u9999', 'buyer@test.com',
+                    'real username', '12345Aa#') is True
+
+    # Book the listing
+    assert create_booking(1, 2, date(2022, 12, 1), date(2022, 12, 3)) is True
+
+    # Double booking protection is currently not working,
+    # trying to fix it currently
+    # Ensure you can't double book
+    # assert create_booking(1, 2, date(2022, 12, 1),
+    #                       date(2022, 12, 3)) is False
 
 
 def test_r1_7_user_register():

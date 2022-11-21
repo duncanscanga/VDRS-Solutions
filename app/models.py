@@ -340,7 +340,7 @@ def desc_character_check(description):
         True if the requirements are meant, otherwise False
     '''
     for element in range(0, len(description)):
-        if not (description[element].isalnum() or description[element] == " " 
+        if not (description[element].isalnum() or description[element] == " "
                 or description[element] == "." or description[element] == ","
                 or description[element] == "!"):
             return False
@@ -642,3 +642,73 @@ def find_listing_by_title(title):
     '''
     listing = Listing.query.filter_by(title=title).all()
     return listing
+
+
+def create_booking(listing_id, uid, start_date, end_date):
+    '''
+    Allows user to book one of the listings
+    Parameters:
+        listing_id  (int):  The id of the listing to be booked
+        uid         (int):  The user's id
+        start_date  (String: 'YYYY-MM-DD'): The booking's start date
+        end_date    (String: 'YYYY-MM-DD'): The booking's end date
+    Returns:
+        True if the booking was successful, False otherwise.
+    '''
+
+    # First ensure that the ids are integers (prevent SQL Injection)
+    if not isinstance(listing_id, int) or not isinstance(uid, int):
+        return False
+
+    # Check if the listing and user exists
+    users = User.query.filter_by(id=uid).all()
+    listings = Listing.query.filter_by(id=listing_id).all()
+    if len(users) == 0 or len(listings) == 0:
+        return False
+
+    user = users[0]
+    listing = listings[0]
+
+    # Ensure it's not the user's own listing
+    if listing.owner_id == user.id:
+        return False
+
+    # Ensure the user can afford the booking
+    # Note: this assumes a set listing price regardless of length of stay.
+    # The current listing model does not specify the meaning of the price.
+    if user.balance - listing.price < 0:
+        return False
+
+    # First ensure that the date formats are correct
+    if not isinstance(start_date, date) or not isinstance(end_date, date):
+        return False
+
+    # Ensure the listing is not already booked during those times
+    # num_conflicts = Booking.query.filter(
+    #     ((start_date <= Booking.start_date) &
+    #     (end_date >= Booking.start_date)) |
+    #     ((start_date >= Booking.start_date) &
+    #     (end_date <= Booking.end_date)) |
+    #     ((start_date >= Booking.start_date) &
+    #     (end_date >= Booking.end_date))
+    # ).all()
+
+    # -------- This doesn't work to filter out double bookings ----------
+    num_conflicts = 0
+    num_conflicts += Booking.query.filter(Booking.listing_id == listing_id,
+                                          Booking.start_date.between(
+                                            start_date, end_date)).count()
+
+    num_conflicts += Booking.query.filter(Booking.listing_id == listing_id,
+                                          Booking.end_date.between(
+                                            start_date, end_date)).count()
+
+    if num_conflicts > 0:
+        return False
+
+    Booking(listing_id=listing_id, price=listing.price,
+            date=date.today(), user_id=uid,
+            owner_id=listing.owner_id, start_date=start_date,
+            end_date=end_date)
+
+    return True
