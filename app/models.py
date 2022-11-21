@@ -697,11 +697,11 @@ def create_booking(listing_id, uid, start_date, end_date):
     num_conflicts = 0
     num_conflicts += Booking.query.filter(Booking.listing_id == listing_id,
                                           Booking.start_date.between(
-                                            start_date, end_date)).count()
+                                          start_date, end_date)).count()
 
     num_conflicts += Booking.query.filter(Booking.listing_id == listing_id,
                                           Booking.end_date.between(
-                                            start_date, end_date)).count()
+                                          start_date, end_date)).count()
 
     if num_conflicts > 0:
         return False
