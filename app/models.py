@@ -685,9 +685,12 @@ def create_booking(listing_id, uid, start_date, end_date):
 
     # Ensure the listing is not already booked during those times
     num_conflicts = Booking.query.filter(
-        (Booking.listing_id == listing_id) & (
-        (Booking.start_date <= start_date) & (start_date <= Booking.end_date) |
-        (Booking.start_date <= end_date) & (end_date <= Booking.end_date))
+        (Booking.listing_id == listing_id)
+        & (
+            (Booking.start_date <= start_date) & (start_date <= Booking
+                                                  .end_date)
+            | (Booking.start_date <= end_date) & (end_date <= Booking.end_date)
+        )
     ).count()
 
     if num_conflicts > 0:
@@ -711,9 +714,7 @@ def browse_listings(user_id):
     Returns:
         The listings where the user is not the owner
     '''
-    listings = Listing.query.filter(
-                                    (Listing.owner_id != user_id)
-                                    ).all()
+    listings = Listing.query.filter((Listing.owner_id != user_id)).all()
     return listings
 
 
@@ -725,9 +726,7 @@ def find_bookings(user_id):
     Returns:
         The bookings where the user is the renter
     '''
-    bookings = Booking.query.filter(
-                                    (Booking.user_id == user_id)
-                                    ).all()
+    bookings = Booking.query.filter((Booking.user_id == user_id)).all()
     return bookings
 
 
