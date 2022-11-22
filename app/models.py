@@ -684,15 +684,22 @@ def create_booking(listing_id, uid, start_date, end_date):
         return False
 
     # Ensure the listing is not already booked during those times
+    # We query the db to find all bookings for the given listing
+    # We then have 3 scenarios to check:
+    # 1) Starts before an existing booking and ends after the existing booking
+    # 2) Ends during an existing booking
+    # 3) Starts during an existing booking
     num_conflicts = Booking.query.filter(
-        (Booking.listing_id == listing_id)
-        & (
-            (Booking.start_date <= start_date) & (start_date <= Booking
-                                                  .end_date)
-            | (Booking.start_date <= end_date) & (end_date <= Booking.end_date)
-        )
+        (Booking.listing_id == listing_id),
+        (
+            ((start_date <= Booking.start_date) & (end_date >= Booking.
+                                                   end_date))
+            | ((end_date <= Booking.end_date) & (end_date >= Booking.
+                                                 start_date))
+            | ((start_date >= Booking.start_date) & (start_date <= Booking.
+                                                     end_date))
+        ),
     ).count()
-
     if num_conflicts > 0:
         return False
 
@@ -700,6 +707,8 @@ def create_booking(listing_id, uid, start_date, end_date):
                       date=date.today(), user_id=uid,
                       owner_id=listing.owner_id, start_date=start_date,
                       end_date=end_date)
+
+    user.balance = user.balance - listing.price
 
     db.session.add(booking)
     db.session.commit()
@@ -744,3 +753,15 @@ def find_booked_listing(user_id):
         listing = Listing.query.filter_by(id=bookings[x].listing_id).all()[0]
         listings.append(listing)
     return listings
+
+
+def get_user_balance(email):
+    '''
+    Determine the balance of the user
+    Parameters:
+        email    (string):      user email
+    Returns:
+        The balance of the user
+    '''
+    user = User.query.filter_by(email=email).all()[0]
+    return user.balance

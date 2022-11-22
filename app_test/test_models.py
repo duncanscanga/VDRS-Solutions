@@ -2,7 +2,7 @@ from app.models import alphanumeric_check, email_check, \
     create_listing, find_listing_by_id, find_listing_by_title, not_empty, \
     postal_code_check, unique_title_check, owner_check, length_check, \
     pw_check, range_check, register, login, description_length_check, \
-    date_check, update_user, update_listing, find_listing, \
+    date_check, update_user, update_listing, find_listing, get_user_balance, \
     desc_character_check, create_booking, User, Listing, db, Booking
 from datetime import date
 from app_test.injection_tests import test_sqli_create_listing, \
@@ -30,8 +30,14 @@ def test_booking_requirement_1():
     assert register('u9999', 'buyer@test.com',
                     'real username', '12345Aa#') is True
 
+    # Get the balance before the booking
+    balance_before = get_user_balance('buyer@test.com')
+
     # Book the listing
     assert create_booking(1, 2, date(2022, 12, 1), date(2022, 12, 3)) is True
+
+    # Ensure the balance has been updated (10 is the price of the listing)
+    assert get_user_balance('buyer@test.com') is (balance_before - 10)
 
 
 def test_booking_requirement_2():
@@ -95,8 +101,11 @@ def test_booking_requirement_3():
     assert create_listing("ListingTitleTwo", "This is a description.",
                           50, 1) is True
 
+    # Add a new User (Balance of $100)
+    assert register('u99992', 'buyer2@test.com',
+                    'real username', '12345Aa#') is True
     # Balance is more than the cost (100 > 50)
-    assert create_booking(2, 2, date(2023, 12, 1), date(2023, 12, 3)) is True
+    assert create_booking(2, 3, date(2023, 12, 1), date(2023, 12, 3)) is True
 
     Booking.query.filter(Booking.listing_id == 2).delete()
 
