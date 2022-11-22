@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+<link rel="stylesheet" href="../static/styles/index.css" />
+
+{% block header %}
+<h1>{% block title %}Browse Listings{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+
+<h3>Listings:</h3>
+
+<div id="listings">
+    <table>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Price</th>
+        </tr>
+        {% for listing in listings %}
+        <tr>
+          <td id="listingTitle">{{ listing.title }}</td>
+          <td id="listingDescription">{{ listing.description }}</td>
+          <td id="listingPrice">${{ listing.price }}</td>
+          <td><a href='/book-listing/{{listing.id}}/{{user.id}}'>Book</a></h4></td>
+        </tr>
+        {% endfor %}
+      </table>
+</div>
+
+
+<div class="btn-wrapper">
+    <input
+      class="btn"
+      type="submit"
+      value="Logout"
+      onclick="location.href = '/logout'"
+    />
+  </div>
+
+{% endblock %}

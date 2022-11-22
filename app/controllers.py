@@ -1,8 +1,10 @@
 from flask import render_template, request, session, redirect
 from app.models import create_listing, login, User, register, update_listing, \
-    update_user, find_listings, find_listing_by_id
+    update_user, find_listings, find_listing_by_id, browse_listings, \
+    find_bookings, create_booking, find_booked_listing
 
 from app import app
+from datetime import datetime
 
 
 def authenticate(inner_function):
@@ -80,9 +82,12 @@ def home(user):
     # by using @authenticate, we don't need to re-write
     # the login checking code all the time for other
     # front-end portals
-
     listings = find_listings(user.id)
-    return render_template('index.html', user=user, listings=listings)
+    bookings = find_bookings(user.id)
+    bookedListings = find_booked_listing(user.id)
+
+    return render_template('index.html', user=user, listings=listings,
+                           bookings=bookings, bookedListings=bookedListings)
 
 
 @app.route('/register', methods=['GET'])
@@ -229,3 +234,49 @@ def post_create_listing(user):
         'create_listing.html',
         user=user,
         msg="Creation Failed!")
+
+
+# Route to browse all listings
+@app.route('/browse-listings', methods=['GET'])
+@authenticate
+def get_browse_listings(user):
+    listings = browse_listings(user.id)
+    return render_template(
+        'browse_listings.html',
+        user=user,
+        listings=listings)
+
+
+# Route to send the booking template
+@app.route('/book-listing/<int:listing_id>/<int:user_id>', methods=['GET'])
+def get_book_listing(listing_id, user_id):
+    listing = find_listing_by_id(listing_id)
+    # Return the template with the listing's current information
+    return render_template(
+        'book_listing.html',
+        listing=listing[0],
+        msg="Please enter the dates you would like to book.")
+
+
+# Route to receive the updated booking information
+@app.route('/book-listing/<int:listing_id>/<int:user_id>', methods=['POST'])
+def post_book_listing(listing_id, user_id):
+    listing = find_listing_by_id(listing_id)
+    # First grab form data
+    start = request.form.get('start')
+    end = request.form.get('end')
+
+    start = datetime.strptime(start, '%Y-%m-%d')
+    end = datetime.strptime(end, '%Y-%m-%d')
+
+    # Evaluate if the update was successful:
+    success = create_booking(listing_id, user_id, start, end)
+    # If so, return to home page
+    # If not, stay on update_listing.html with error msg
+    if success:
+        return redirect('/')
+    else:
+        return render_template(
+            'book_listing.html',
+            listing=listing[0],
+            msg="Booking Failed!")

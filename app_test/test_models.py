@@ -3,15 +3,121 @@ from app.models import alphanumeric_check, email_check, \
     postal_code_check, unique_title_check, owner_check, length_check, \
     pw_check, range_check, register, login, description_length_check, \
     date_check, update_user, update_listing, find_listing, \
-    desc_character_check, create_booking
+    desc_character_check, create_booking, User, Listing, db, Booking
 from datetime import date
 from app_test.injection_tests import test_sqli_create_listing, \
     test_sqli_register
 
 
-# SIMPLE unit test without any boundary testing to
-# initially test each requirement
-def test_create_booking():
+def test_booking_requirement_1():
+    '''
+    Testing Booking Requirement 1:
+        A user can book a listing.
+    '''
+    User.query.delete()
+    Listing.query.delete()
+    Booking.query.delete()
+    db.session.commit()
+
+    # Start by registering a host user
+    assert register('u999', 'host@test.com',
+                    'real username', '12345Aa#') is True
+    # Then create a listing
+    assert create_listing("ListingTitle", "This is a description.",
+                          10, 1) is True
+
+    # Register a buyer
+    assert register('u9999', 'buyer@test.com',
+                    'real username', '12345Aa#') is True
+
+    # Book the listing
+    assert create_booking(1, 2, date(2022, 12, 1), date(2022, 12, 3)) is True
+
+
+def test_booking_requirement_2():
+    '''
+    Testing Booking Requirement 2:
+        A user cannot book a listing for his/her listing.
+    '''
+
+    Listing.query.delete()
+    User.query.delete()
+    Booking.query.delete()
+    db.session.commit()
+
+    # Start by registering one user
+    assert register('u999', 'host@test.com',
+                    'real username', '12345Aa#') is True
+
+    # Then create a listing
+    assert create_listing("ListingTitle", "This is a description.",
+                          10, 1) is True
+
+    # User cannot book a listing that they own
+    assert create_booking(1, 1, date(2022, 12, 1), date(2022, 12, 3)) is False
+
+    # Add a new User
+    assert register('u9999', 'buyer@test.com',
+                    'real username', '12345Aa#') is True
+
+    # The new User can book the listing
+    assert create_booking(1, 2, date(2022, 12, 1), date(2022, 12, 3)) is True
+
+
+def test_booking_requirement_3():
+    '''
+    Testing Booking Requirement 3:
+        A user cannot book a listing that costs more than his/her balance.
+    '''
+    Listing.query.delete()
+    User.query.delete()
+    Booking.query.delete()
+    db.session.commit()
+
+    # Start by registering one user
+    assert register('u999', 'host@test.com',
+                    'real username', '12345Aa#') is True
+
+    # Add a new User (Balance of $100)
+    assert register('u9999', 'buyer@test.com',
+                    'real username', '12345Aa#') is True
+
+    # Then create a listing with price of 100
+    assert create_listing("ListingTitle", "This is a description.",
+                          100, 1) is True
+
+    # Balance is equal to the cost
+    assert create_booking(1, 2, date(2022, 12, 1), date(2022, 12, 3)) is True
+
+    Booking.query.filter(Booking.listing_id == 1).delete()
+
+    # Then create a listing with price less than 100
+    assert create_listing("ListingTitleTwo", "This is a description.",
+                          50, 1) is True
+
+    # Balance is more than the cost (100 > 50)
+    assert create_booking(2, 2, date(2023, 12, 1), date(2023, 12, 3)) is True
+
+    Booking.query.filter(Booking.listing_id == 2).delete()
+
+    # Then create a listing with price more than 100
+    assert create_listing("ListingTitleThree", "This is a description.",
+                          110, 1) is True
+
+    # Balance is less than the cost (100 < 110)
+    assert create_booking(3, 2, date(2024, 12, 1), date(2024, 12, 3)) is False
+
+
+def test_booking_requirement_4():
+    '''
+    Testing Booking Requirement 4:
+        A user cannot book a listing that is already booked
+        with the overlapped dates.
+    '''
+    User.query.delete()
+    Listing.query.delete()
+    Booking.query.delete()
+    db.session.commit()
 
     # Start by registering a host user
     assert register('u999', 'host@test.com',
@@ -31,9 +137,9 @@ def test_create_booking():
     assert create_booking(1, 2, date(2022, 12, 1),
                           date(2022, 12, 3)) is False
 
-    # Ensure we can't double book
-    assert create_booking(1, 2, date(2022, 11, 20),
-                          date(2022, 12, 10)) is False
+    # Ensure we can book the next day
+    assert create_booking(1, 2, date(2022, 12, 4),
+                          date(2022, 12, 10)) is True
 
 
 def test_r1_7_user_register():

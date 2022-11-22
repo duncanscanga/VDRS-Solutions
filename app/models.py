@@ -685,12 +685,9 @@ def create_booking(listing_id, uid, start_date, end_date):
 
     # Ensure the listing is not already booked during those times
     num_conflicts = Booking.query.filter(
-        ((start_date <= Booking.start_date) &
-            (end_date >= Booking.start_date)) |
-        ((start_date >= Booking.start_date) &
-            (end_date <= Booking.end_date)) |
-        ((start_date >= Booking.start_date) &
-            (end_date >= Booking.end_date))
+        (Booking.listing_id == listing_id) & (
+        (Booking.start_date <= start_date) & (start_date <= Booking.end_date) |
+        (Booking.start_date <= end_date) & (end_date <= Booking.end_date))
     ).count()
 
     if num_conflicts > 0:
@@ -704,3 +701,47 @@ def create_booking(listing_id, uid, start_date, end_date):
     db.session.add(booking)
     db.session.commit()
     return True
+
+
+def browse_listings(user_id):
+    '''
+    Find all listings where the user is not the owner
+    Parameters:
+        user_id    (int):      user id
+    Returns:
+        The listings where the user is not the owner
+    '''
+    listings = Listing.query.filter(
+                                    (Listing.owner_id != user_id)
+                                    ).all()
+    return listings
+
+
+def find_bookings(user_id):
+    '''
+    Find all bookings where the user is the renter
+    Parameters:
+        user_id    (int):      user id
+    Returns:
+        The bookings where the user is the renter
+    '''
+    bookings = Booking.query.filter(
+                                    (Booking.user_id == user_id)
+                                    ).all()
+    return bookings
+
+
+def find_booked_listing(user_id):
+    '''
+    For each booking the user has, find the associated listing
+    Parameters:
+        user_id    (int):      user id
+    Returns:
+        The listings the user has booked
+    '''
+    bookings = find_bookings(user_id)
+    listings = []
+    for x in range(len(bookings)):
+        listing = Listing.query.filter_by(id=bookings[x].listing_id).all()[0]
+        listings.append(listing)
+    return listings
