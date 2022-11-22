@@ -27,11 +27,13 @@ def test_create_booking():
     # Book the listing
     assert create_booking(1, 2, date(2022, 12, 1), date(2022, 12, 3)) is True
 
-    # Double booking protection is currently not working,
-    # trying to fix it currently
-    # Ensure you can't double book
-    # assert create_booking(1, 2, date(2022, 12, 1),
-    #                       date(2022, 12, 3)) is False
+    # Ensure we can't double book
+    assert create_booking(1, 2, date(2022, 12, 1),
+                          date(2022, 12, 3)) is False
+
+    # Ensure we can't double book
+    assert create_booking(1, 2, date(2022, 11, 20),
+                          date(2022, 12, 10)) is False
 
 
 def test_r1_7_user_register():

@@ -684,31 +684,23 @@ def create_booking(listing_id, uid, start_date, end_date):
         return False
 
     # Ensure the listing is not already booked during those times
-    # num_conflicts = Booking.query.filter(
-    #     ((start_date <= Booking.start_date) &
-    #     (end_date >= Booking.start_date)) |
-    #     ((start_date >= Booking.start_date) &
-    #     (end_date <= Booking.end_date)) |
-    #     ((start_date >= Booking.start_date) &
-    #     (end_date >= Booking.end_date))
-    # ).all()
-
-    # -------- This doesn't work to filter out double bookings ----------
-    num_conflicts = 0
-    num_conflicts += Booking.query.filter(Booking.listing_id == listing_id,
-                                          Booking.start_date.between(
-                                              start_date, end_date)).count()
-
-    num_conflicts += Booking.query.filter(Booking.listing_id == listing_id,
-                                          Booking.end_date.between(
-                                              start_date, end_date)).count()
+    num_conflicts = Booking.query.filter(
+        ((start_date <= Booking.start_date) &
+            (end_date >= Booking.start_date)) |
+        ((start_date >= Booking.start_date) &
+            (end_date <= Booking.end_date)) |
+        ((start_date >= Booking.start_date) &
+            (end_date >= Booking.end_date))
+    ).count()
 
     if num_conflicts > 0:
         return False
 
-    Booking(listing_id=listing_id, price=listing.price,
-            date=date.today(), user_id=uid,
-            owner_id=listing.owner_id, start_date=start_date,
-            end_date=end_date)
+    booking = Booking(listing_id=listing_id, price=listing.price,
+                      date=date.today(), user_id=uid,
+                      owner_id=listing.owner_id, start_date=start_date,
+                      end_date=end_date)
 
+    db.session.add(booking)
+    db.session.commit()
     return True
