@@ -9,17 +9,19 @@
 <h2 id="welcome-header">Welcome {{ user.username }} !</h2>
 
 
-<h3>Listings:</h3>
+<h3>Your Owned Listings:</h3>
 
 <div id="listings">
     <table>
         <tr>
           <th>Title</th>
+          <th>Description</th>
           <th>Price</th>
         </tr>
         {% for listing in listings %}
         <tr>
           <td id="listingTitle">{{ listing.title }}</td>
+          <td id="listingDescription">{{ listing.description }}</td>
           <td id="listingPrice">${{ listing.price }}</td>
           <td><a href='/update-listing/{{listing.id}}'>Update</a></h4></td>
         </tr>
@@ -30,6 +32,52 @@
             <td><a href='/create-listing'>Create New Listing</a></h4></td>
           </tr>
       </table>
+</div>
+
+<div>
+  <h3>Your Bookings:</h3>
+
+<div id="bookings">
+    <table>
+        <tr>
+          <th>Price</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+        </tr>
+        {% for booking in bookings %}
+        <tr>
+          <td id="bookingPrice">${{ booking.price }}</td>
+          <td id="bookingStart">{{ booking.start_date }}</td>
+          <td id="bookingEnd">{{ booking.end_date }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+</div>
+</div>
+
+<div>
+  <h3>Your Booked Listings:</h3>
+
+<div id="bookedListings">
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Price</th>
+    </tr>
+    {% for listing in bookedListings %}
+    <tr>
+      <td id="listingTitle">{{ listing.title }}</td>
+      <td id="listingDescription">{{ listing.description }}</td>
+      <td id="listingPrice">${{ listing.price }}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+      </tr>
+  </table>
+</div>
 </div>
 
 

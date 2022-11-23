@@ -1,0 +1,63 @@
+{% extends 'base.html' %} {% block content %}
+<link rel="stylesheet" href="../static/styles/create_listing.css" />
+
+<div class="container">
+  <h1 id="header">Book Listing</h1>
+  <h4 id="message">{{ msg }}</h4>
+  <form method="post">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input
+        class="form-control"
+        name="title"
+        id="title"
+        value="{{listing.title}}"
+        readonly
+      />
+      <label for="description">Description</label>
+      <input
+        class="form-control"
+        name="description"
+        id="description"
+        value="{{listing.description}}"
+        readonly
+      />
+      <label for="price">Price</label>
+      <input
+        class="form-control"
+        name="price"
+        id="price"
+        value="{{listing.price}}"
+        readonly
+      />
+
+      <label for="start">Start Date</label>
+      <input
+        class="form-control"
+        name="start"
+        id="start"
+        type="date"
+        required
+      />
+
+      <label for="end">End Date</label>
+      <input
+        class="form-control"
+        name="end"
+        id="end"
+        type="date"
+        required
+      />
+
+
+      <div class="btn-wrapper">
+        <input
+          class="btn"
+          type="submit"
+          value="Book Listing"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
