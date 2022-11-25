@@ -124,15 +124,16 @@ def test_sqli_booking():
     db.session.commit()
 
     # Start by registering a host user
-    assert register('u586', 'host546@test.com',
-                    'real username235', '12345Aa#') is True
+    assert register('u999', 'host@test.com',
+                    'real username', '12345Aa#') is True
+
     # Then create a listing
     assert create_listing("ListingTitle", "This is a description.",
                           10, 1) is True
 
     # Register a buyer
-    assert register('u586', 'buyer@test.com',
-                    'real username235', '12345Aa#') is True
+    assert register('u9999', 'buyer@test.com',
+                    'real username', '12345Aa#') is True
 
     for line in lines:
         listing_id_booking(line)
@@ -145,15 +146,16 @@ def test_sqli_booking():
         db.session.commit()
 
         # Start by registering a host user
-        assert register('u586', 'host546@test.com',
-                        'real username235', '12345Aa#') is True
+        assert register('u999', 'host@test.com',
+                        'real username', '12345Aa#') is True
+
         # Then create a listing
         assert create_listing("ListingTitle", "This is a description.",
                               10, 1) is True
 
         # Register a buyer
-        assert register('u586', 'buyer@test.com',
-                        'real username235', '12345Aa#') is True
+        assert register('u9999', 'buyer@test.com',
+                        'real username', '12345Aa#') is True
 
 
 def listing_id_booking(line):
