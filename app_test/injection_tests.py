@@ -123,6 +123,21 @@ def test_sqli_booking():
         uid_booking(line)
         start_date_booking(line)
         end_date_booking(line)
+        User.query.delete()
+        Listing.query.delete()
+        Booking.query.delete()
+        db.session.commit()
+
+        # Start by registering a host user
+        assert register('u586', 'host546@test.com',
+                        'real username235', '12345Aa#') is True
+        # Then create a listing
+        assert create_listing("ListingTitle", "This is a description.",
+                            10, 1) is True
+
+        # Register a buyer
+        assert register('u586', 'buyer@test.com',
+                        'real username235', '12345Aa#') is True
 
 
 def listing_id_booking(line):
@@ -130,23 +145,6 @@ def listing_id_booking(line):
     Function to test SQL Injection handling for booking method
     for the 'listing_id' parameter.
     '''
-    User.query.delete()
-    Listing.query.delete()
-    Booking.query.delete()
-    db.session.commit()
-
-    # Start by registering a host user
-    assert register('u533', 'host10@test.com',
-                    'real username2', '12345Aa#') is True
-
-    # Then create a listing
-    assert create_listing("ListingTitle", "This is a description.",
-                          10, 1) is True
-
-    # Register a buyer
-    assert register('u9999', 'buyer@test.com',
-                    'real username', '12345Aa#') is True
-
     # Book the listing
     assert create_booking(line, 2, date(2022, 12, 1),
                           date(2022, 12, 3)) is False
@@ -157,22 +155,6 @@ def uid_booking(line):
     Function to test SQL Injection handling for booking method
     for the 'listing_id' parameter.
     '''
-    User.query.delete()
-    Listing.query.delete()
-    Booking.query.delete()
-    db.session.commit()
-
-    # Start by registering a host user
-    assert register('u999', 'host@test.com',
-                    'real username', '12345Aa#') is True
-    # Then create a listing
-    assert create_listing("ListingTitle", "This is a description.",
-                          10, 1) is True
-
-    # Register a buyer
-    assert register('u9999', 'buyer@test.com',
-                    'real username', '12345Aa#') is True
-
     # Book the listing
     assert create_booking(1, line, date(2022, 12, 1),
                           date(2022, 12, 3)) is False
@@ -183,21 +165,6 @@ def start_date_booking(line):
     Function to test SQL Injection handling for booking method
     for the 'listing_id' parameter.
     '''
-    User.query.delete()
-    Listing.query.delete()
-    Booking.query.delete()
-    db.session.commit()
-
-    # Start by registering a host user
-    assert register('u999', 'host@test.com',
-                    'real username', '12345Aa#') is True
-    # Then create a listing
-    assert create_listing("ListingTitle", "This is a description.",
-                          10, 1) is True
-
-    # Register a buyer
-    assert register('u9999', 'buyer@test.com',
-                    'real username', '12345Aa#') is True
 
     # Book the listing
     assert create_booking(1, 2, line, date(2022, 12, 3)) is False
@@ -208,21 +175,6 @@ def end_date_booking(line):
     Function to test SQL Injection handling for booking method
     for the 'listing_id' parameter.
     '''
-    User.query.delete()
-    Listing.query.delete()
-    Booking.query.delete()
-    db.session.commit()
-
-    # Start by registering a host user
-    assert register('u999', 'host@test.com',
-                    'real username', '12345Aa#') is True
-    # Then create a listing
-    assert create_listing("ListingTitle", "This is a description.",
-                          10, 1) is True
-
-    # Register a buyer
-    assert register('u9999', 'buyer@test.com',
-                    'real username', '12345Aa#') is True
 
     # Book the listing
     assert create_booking(1, 2, date(2022, 12, 1), line) is False
