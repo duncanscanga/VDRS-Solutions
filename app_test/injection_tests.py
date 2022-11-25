@@ -118,6 +118,22 @@ def test_sqli_booking():
     injection_file = open('app_test/Generic_SQLI.txt', 'r')
     lines = injection_file.readlines()
 
+    User.query.delete()
+    Listing.query.delete()
+    Booking.query.delete()
+    db.session.commit()
+
+    # Start by registering a host user
+    assert register('u586', 'host546@test.com',
+                    'real username235', '12345Aa#') is True
+    # Then create a listing
+    assert create_listing("ListingTitle", "This is a description.",
+                        10, 1) is True
+
+    # Register a buyer
+    assert register('u586', 'buyer@test.com',
+                    'real username235', '12345Aa#') is True
+
     for line in lines:
         listing_id_booking(line)
         uid_booking(line)
@@ -133,7 +149,7 @@ def test_sqli_booking():
                         'real username235', '12345Aa#') is True
         # Then create a listing
         assert create_listing("ListingTitle", "This is a description.",
-                            10, 1) is True
+                              10, 1) is True
 
         # Register a buyer
         assert register('u586', 'buyer@test.com',
