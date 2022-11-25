@@ -128,7 +128,7 @@ def test_sqli_booking():
                     'real username235', '12345Aa#') is True
     # Then create a listing
     assert create_listing("ListingTitle", "This is a description.",
-                        10, 1) is True
+                          10, 1) is True
 
     # Register a buyer
     assert register('u586', 'buyer@test.com',
