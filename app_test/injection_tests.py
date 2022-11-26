@@ -140,10 +140,6 @@ def test_sqli_booking():
         uid_booking(line)
         start_date_booking(line)
         end_date_booking(line)
-        User.query.delete()
-        Listing.query.delete()
-        Booking.query.delete()
-        db.session.commit()
 
         # Start by registering a host user
         assert register('u999', 'host@test.com',
