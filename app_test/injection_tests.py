@@ -141,18 +141,6 @@ def test_sqli_booking():
         start_date_booking(line)
         end_date_booking(line)
 
-        # Start by registering a host user
-        assert register('u999', 'host@test.com',
-                        'real username', '12345Aa#') is True
-
-        # Then create a listing
-        assert create_listing("ListingTitle", "This is a description.",
-                              10, 1) is True
-
-        # Register a buyer
-        assert register('u9999', 'buyer@test.com',
-                        'real username', '12345Aa#') is True
-
 
 def listing_id_booking(line):
     '''
