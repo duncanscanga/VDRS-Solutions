@@ -1,4 +1,7 @@
-from app.models import create_listing, Listing, User, register
+from app.models import create_listing, create_booking, \
+    Listing, User, Booking, register, db
+from datetime import date
+
 '''
 File to test SQL Injection handling for Register and Create Listing methods
 '''
@@ -106,3 +109,74 @@ def password_register(line):
     '''
     User.query.filter(User.email == "test0@test.com").delete()
     assert register('u90', 'test0@test.com', 'real_u9', line) is False
+
+
+def test_sqli_booking():
+    '''
+    Function to test SQL Injection handling for booking
+    '''
+    injection_file = open('app_test/Generic_SQLI.txt', 'r')
+    lines = injection_file.readlines()
+
+    User.query.delete()
+    Listing.query.delete()
+    Booking.query.delete()
+    db.session.commit()
+
+    # Start by registering a host user
+    assert register('u999', 'host@test.com',
+                    'real username', '12345Aa#') is True
+
+    # Then create a listing
+    assert create_listing("ListingTitle", "This is a description.",
+                          10, 1) is True
+
+    # Register a buyer
+    assert register('u9999', 'buyer@test.com',
+                    'real username', '12345Aa#') is True
+
+    for line in lines:
+        listing_id_booking(line)
+        uid_booking(line)
+        start_date_booking(line)
+        end_date_booking(line)
+
+
+def listing_id_booking(line):
+    '''
+    Function to test SQL Injection handling for booking method
+    for the 'listing_id' parameter.
+    '''
+    # Book the listing
+    assert create_booking(line, 2, date(2022, 12, 1),
+                          date(2022, 12, 3)) is False
+
+
+def uid_booking(line):
+    '''
+    Function to test SQL Injection handling for booking method
+    for the 'listing_id' parameter.
+    '''
+    # Book the listing
+    assert create_booking(1, line, date(2022, 12, 1),
+                          date(2022, 12, 3)) is False
+
+
+def start_date_booking(line):
+    '''
+    Function to test SQL Injection handling for booking method
+    for the 'listing_id' parameter.
+    '''
+
+    # Book the listing
+    assert create_booking(1, 2, line, date(2022, 12, 3)) is False
+
+
+def end_date_booking(line):
+    '''
+    Function to test SQL Injection handling for booking method
+    for the 'listing_id' parameter.
+    '''
+
+    # Book the listing
+    assert create_booking(1, 2, date(2022, 12, 1), line) is False

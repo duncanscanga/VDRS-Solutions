@@ -6,7 +6,7 @@ from app.models import alphanumeric_check, email_check, \
     desc_character_check, create_booking, User, Listing, db, Booking
 from datetime import date
 from app_test.injection_tests import test_sqli_create_listing, \
-    test_sqli_register
+    test_sqli_register, test_sqli_booking
 
 
 def test_booking_requirement_1():
@@ -62,7 +62,7 @@ def test_booking_requirement_2():
     # User cannot book a listing that they own
     assert create_booking(1, 1, date(2022, 12, 1), date(2022, 12, 3)) is False
 
-    # Add a new User
+    # Add a new Usermar
     assert register('u9999', 'buyer@test.com',
                     'real username', '12345Aa#') is True
 
@@ -542,3 +542,4 @@ def test_sqli_listing():
     '''
     test_sqli_create_listing()
     test_sqli_register()
+    test_sqli_booking()
