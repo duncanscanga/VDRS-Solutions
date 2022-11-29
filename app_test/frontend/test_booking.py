@@ -16,8 +16,9 @@ class FrontEndTest(BaseCase):
         """
         This is a front end unit test to the booking page using
         input partitioning tests.
-        Possible inputs: valid/invalid start date, valid/invalid end date
-        Requirements tested: Booking Requirement 1, 4
+        Possible inputs: valid/invalid start date, valid/invalid end date,
+        low user balance 
+        Requirements tested: Booking Requirement 1, 3, 4
         """
 
         FrontEndTest.test_booking_helper(self)
@@ -29,7 +30,7 @@ class FrontEndTest(BaseCase):
         self.open(base_url + "/book-listing/" + str(listing_id) +
                   "/" + str(user_id))
 
-        # Valid start date, valid end date
+        # Valid start date, valid end date, balance is enough
         self.type("#start", "2022\t1215")
         self.type("#end", "2022\t1220")
         self.click('input[type="submit"]')
@@ -39,7 +40,7 @@ class FrontEndTest(BaseCase):
         self.open(base_url + "/book-listing/" + str(listing_id) + 
                   "/" + str(user_id))
 
-        # Invalid start date, valid end date
+        # Invalid start date, valid end date, balance is enough
         self.type("#start", "2022\t1218")
         self.type("#end", "2022\t1225")
         self.click('input[type="submit"]')
@@ -47,9 +48,22 @@ class FrontEndTest(BaseCase):
         self.assert_element("#message")
         self.assert_text("Booking Failed!", "#message")
 
-        # Valid start date, invalid end date
+        # Valid start date, invalid end date, balance is enough
         self.type("#start", "2022\t1226")
         self.type("#end", "2022\t1216")
+        self.click('input[type="submit"]')
+        # Needs to return an error
+        self.assert_element("#message")
+        self.assert_text("Booking Failed!", "#message")
+
+        listing = Listing.query.filter(Listing.title == "Second Listing").all()
+        listing_id = listing[0].id
+        self.open(base_url + "/book-listing/" + str(listing_id) +
+                  "/" + str(user_id))
+
+        # Valid start date, valid end date, balance is less than the cost
+        self.type("#start", "2022\t1210")
+        self.type("#end", "2022\t1212")
         self.click('input[type="submit"]')
         # Needs to return an error
         self.assert_element("#message")
@@ -112,7 +126,7 @@ class FrontEndTest(BaseCase):
         partitioning tests.
         Possible Outputs: msg=Booking Failed,
         redirect to home page
-        Requirements tested: Booking Requirement 1, 4
+        Requirements tested: Booking Requirement 1, 4, 5
         """
 
         FrontEndTest.test_booking_helper(self)
@@ -124,12 +138,17 @@ class FrontEndTest(BaseCase):
         self.open(base_url + "/book-listing/" + str(listing_id) + 
                   "/" + str(user_id))
 
-        # Valid input, redirect to homepage
+        # Valid input, redirect to homepage with booked listings
         self.type("#start", "2022\t1215")
         self.type("#end", "2022\t1220")
         self.click('input[type="submit"]')
         # Needs to take the user to the home page
         self.assert_element("#welcome-header")
+        self.assert_text("Welcome Second !", "#welcome-header")
+        # Shows booked listings
+        self.assert_text("$10.0", "#bookingPrice")
+        self.assert_text("2022-12-15", "#bookingStart")
+        self.assert_text("2022-12-20", "#bookingEnd")
 
         self.open(base_url + "/book-listing/" + str(listing_id) + 
                   "/" + str(user_id))
@@ -186,7 +205,7 @@ class FrontEndTest(BaseCase):
         self.open(base_url + "/create-listing")
         self.type("#title", "Second Listing")
         self.type("#description", "This is the second test description")
-        self.type("#price", "20.00")
+        self.type("#price", "120.00")
         self.click('input[type="submit"]')
 
         # Logout as the first user
