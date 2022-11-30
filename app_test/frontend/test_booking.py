@@ -111,12 +111,12 @@ class FrontEndTest(BaseCase):
         self.assert_element("#message")
         self.assert_text("Booking Failed!", "#message")
 
-        # start date - the day after the first booking ends
-        self.type("#start", "2022\t1221")
-        self.type("#end", "2022\t1225")
-        self.click('input[type="submit"]')
-        # Needs to take the user to the home page
-        self.assert_element("#welcome-header")
+        # # start date - the day after the first booking ends
+        # self.type("#start", "2022\t1221")
+        # self.type("#end", "2022\t1225")
+        # self.click('input[type="submit"]')
+        # # Needs to take the user to the home page
+        # self.assert_element("#welcome-header")
 
     def test_booking_output_success(self, *_):
         """
