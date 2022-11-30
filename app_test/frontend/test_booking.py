@@ -71,10 +71,9 @@ class FrontEndTest(BaseCase):
         """
         This is a front end unit test to the booking page using input
         boundary tests.
-        Cannot double book a listing. Start date of a second booking has to be
-        the next day.
-        Possible inputs for start date: in the middle of the first booking,
-        the day before the booking end date, the next date after
+        Cannot double book a listing.
+        Possible inputs for invalid start date: middle of the first booking,
+        at least one day before the booking end date.
         Requirements tested: Booking Requirement 4
         """
 
@@ -110,13 +109,6 @@ class FrontEndTest(BaseCase):
         # Needs to return an error
         self.assert_element("#message")
         self.assert_text("Booking Failed!", "#message")
-
-        # # start date - the day after the first booking ends
-        # self.type("#start", "2022\t1221")
-        # self.type("#end", "2022\t1225")
-        # self.click('input[type="submit"]')
-        # # Needs to take the user to the home page
-        # self.assert_element("#welcome-header")
 
     def test_booking_output_success(self, *_):
         """
