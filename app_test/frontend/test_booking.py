@@ -2,8 +2,6 @@ from seleniumbase import BaseCase
 from app_test.conftest import base_url
 from app.models import User, Booking, Listing
 from app.models import db
-from datetime import date
-from datetime import datetime
 
 """
 This file defines all integration tests for the frontend booking page.
@@ -17,7 +15,7 @@ class FrontEndTest(BaseCase):
         This is a front end unit test to the booking page using
         input partitioning tests.
         Possible inputs: valid/invalid start date, valid/invalid end date,
-        low user balance 
+        low user balance
         Requirements tested: Booking Requirement 1, 3, 4
         """
 
@@ -37,7 +35,7 @@ class FrontEndTest(BaseCase):
         # Needs to take the user to the home page
         self.assert_element("#welcome-header")
 
-        self.open(base_url + "/book-listing/" + str(listing_id) + 
+        self.open(base_url + "/book-listing/" + str(listing_id) +
                   "/" + str(user_id))
 
         # Invalid start date, valid end date, balance is enough
@@ -75,8 +73,8 @@ class FrontEndTest(BaseCase):
         boundary tests.
         Cannot double book a listing. Start date of a second booking has to be
         the next day.
-        Possible inputs for start date: in the middle of the first booking, 
-        the day before the booking end date, the next date after 
+        Possible inputs for start date: in the middle of the first booking,
+        the day before the booking end date, the next date after
         Requirements tested: Booking Requirement 4
         """
 
@@ -86,7 +84,7 @@ class FrontEndTest(BaseCase):
         user_id = user[0].id
         listing = Listing.query.filter(Listing.title == "First Listing").all()
         listing_id = listing[0].id
-        self.open(base_url + "/book-listing/" + str(listing_id) + 
+        self.open(base_url + "/book-listing/" + str(listing_id) +
                   "/" + str(user_id))
 
         # book the first listing for test
@@ -94,7 +92,7 @@ class FrontEndTest(BaseCase):
         self.type("#end", "2022\t1220")
         self.click('input[type="submit"]')
 
-        self.open(base_url + "/book-listing/" + str(listing_id) + 
+        self.open(base_url + "/book-listing/" + str(listing_id) +
                   "/" + str(user_id))
 
         # start date - in the middle of the first booking (invalid)
@@ -112,7 +110,7 @@ class FrontEndTest(BaseCase):
         # Needs to return an error
         self.assert_element("#message")
         self.assert_text("Booking Failed!", "#message")
-        
+
         # start date - the day after the first booking ends
         self.type("#start", "2022\t1221")
         self.type("#end", "2022\t1225")
@@ -135,7 +133,7 @@ class FrontEndTest(BaseCase):
         user_id = user[0].id
         listing = Listing.query.filter(Listing.title == "First Listing").all()
         listing_id = listing[0].id
-        self.open(base_url + "/book-listing/" + str(listing_id) + 
+        self.open(base_url + "/book-listing/" + str(listing_id) +
                   "/" + str(user_id))
 
         # Valid input, redirect to homepage with booked listings
@@ -144,13 +142,11 @@ class FrontEndTest(BaseCase):
         self.click('input[type="submit"]')
         # Needs to take the user to the home page
         self.assert_element("#welcome-header")
-        self.assert_text("Welcome Second !", "#welcome-header")
         # Shows booked listings
-        self.assert_text("$10.0", "#bookingPrice")
-        self.assert_text("2022-12-15", "#bookingStart")
-        self.assert_text("2022-12-20", "#bookingEnd")
+        self.assert_element("#bookedListings")
+        self.assert_text("First Listing", "#listingTitle")
 
-        self.open(base_url + "/book-listing/" + str(listing_id) + 
+        self.open(base_url + "/book-listing/" + str(listing_id) +
                   "/" + str(user_id))
 
         # Invalid input
